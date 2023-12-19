@@ -1,7 +1,9 @@
 # Project 3 Proposal
 
 Project Title: World Data Indicators 2013 - 2023
+
 Start Date: 12/18/2023
+
 Team: Alyssa Cullinan, Shubhangi Bidkar, Sonia Singh
 
 Repo: https://github.com/AlyssaCullinan/project3-world-indicators.git
