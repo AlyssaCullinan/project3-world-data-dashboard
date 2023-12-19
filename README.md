@@ -32,3 +32,6 @@ https://www.kaggle.com/datasets/nelgiriyewithana/countries-of-the-world-2023/
 ### Examples of the Dataset
 ![Alt text](image-4.png)
 ![Alt text](image-5.png)
+
+### Sketch of the Dashboard
+![Alt text](image-6.png)
