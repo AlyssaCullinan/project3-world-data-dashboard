@@ -1,6 +1,5 @@
-# Project 3 Proposal
-
-Project Title: World Data Indicators 2013 - 2023
+# World Data Indicators 2013 - 2023
+## Project 3 Proposal
 
 Start Date: 12/18/2023
 
