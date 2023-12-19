@@ -7,6 +7,7 @@ Start Date: 12/18/2023
 Team: Alyssa Cullinan, Shubhangi Bidkar, Sonia Singh
 
 Repo: https://github.com/AlyssaCullinan/project3-world-indicators.git
+
 Technologies: PostgreSQL, Python (SQLAlchemy, Flask), HTML/CSS, JavaScript (D3, Leaflet, Plotly)
 
 ### Overview
