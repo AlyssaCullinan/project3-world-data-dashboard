@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Racing Horizontal Bar Chart - GDP by Country</title>
+  </head>
+  <body>
+    <div id="chart-container">
+      <!-- Chart content will be loaded here -->
+    </div>
+
+    <div id="current-year-container">
+      <!-- Display current year here -->
+    </div>
+
+    <script>
+      // Sample data with years
+      var years = [2020, 2021, 2022];
+
+      var layoutChart = {
+        countries: ["USA", "China", "India"],
+        gdpData: [
+          [21000, 22000, 23000],
+          [15000, 18000, 24000],
+          [2800, 3200, 3500],
+        ],
+      };
+
+      layoutChart.layout = {
+        title: "Racing Horizontal Bar Chart - GDP by Country",
+        xaxis: {
+          title: "GDP (in billion USD)",
+          range: [0, Math.max(...layoutChart.gdpData.flat()) + 500],
+        },
+        yaxis: {
+          title: "Country",
+          type: "category",
+        },
+        barmode: "stack",
+      };
+
+      layoutChart.frames = years.map(function (year, i) {
+        return {
+          name: year,
+          data: layoutChart.countries
+            .map(function (country) {
+              var index = layoutChart.countries.indexOf(country);
+              return {
+                x: [layoutChart.gdpData[index][i]],
+                y: [country],
+                name: country,
+                type: "bar",
+                orientation: "h",
+                text: [layoutChart.gdpData[index][i].toLocaleString()],
+                textposition: "inside",
+              };
+            })
+            .sort(function (a, b) {
+              // Sort bars within each frame based on GDP values in descending order
+              return b.x[0] - a.x[0];
+            }),
+        };
+      });
+
+      layoutChart.config = { responsive: true };
+
+      // Attach the chart to the existing plot
+      Plotly.newPlot(
+        "chart-container",
+        layoutChart.frames[0].data,
+        layoutChart.layout,
+        layoutChart.config
+      ).then(function (plot) {
+        // Add frames to update the chart for each year
+        Plotly.addFrames("chart-container", layoutChart.frames);
+
+        // Display the initial chart
+        Plotly.animate("chart-container", years, {
+          transition: {
+            duration: 1000,
+            redraw: true,
+          },
+          frame: {
+            duration: 1000,
+            redraw: true,
+          },
+        });
+
+        // Display the current year in the HTML element using D3
+        d3.select("#current-year-container").text(years[0]);
+
+        // Update the current year in the HTML element when the animation frame changes
+        plot.on("plotly_animation", function (event) {
+          var currentYear = years[event.frameIndex];
+          // Update the current year using D3
+          d3.select("#current-year-container").text(currentYear);
+        });
+      });
+    </script>
+  </body>
+</html>
