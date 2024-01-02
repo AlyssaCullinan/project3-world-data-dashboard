@@ -7,30 +7,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, inspect
 from config import PGUID, PGPASS, PGHOST, PGPORT, PGDB
 from decimal import Decimal
-<<<<<<< HEAD
-import pandas as pd
-=======
 import simplejson as json
 import pandas as pd
 
->>>>>>> b19490cb1f57dee38af82e2c441b99de9fbbed9e
 #################################################
 # Database Setup
 #################################################
 db_connection_string = f'postgresql://{PGUID}:{PGPASS}@{PGHOST}:{PGPORT}/{PGDB}'
-<<<<<<< HEAD
-print(db_connection_string)
-# create engine to to database
-engine = create_engine(db_connection_string)
-# reflect an existing database into a new model
-Base = automap_base()
-# reflect the tables
-Base.prepare(autoload_with=engine)
-# print(Base.classes.keys())
-#Test = Base.classes.test
-WBIndicators = Base.classes.world_bank_indicators
-Lat_lng_info = Base.classes.lat_long_info
-=======
 
 print(db_connection_string)
 
@@ -40,37 +23,19 @@ engine = create_engine(db_connection_string)
 # reflect an existing database into a new model
 Base = automap_base()
 
-
-
 # reflect the tables
 Base.prepare(autoload_with=engine)
-# print(Base.classes.keys())
+print(Base.classes.keys())
 
 #Test = Base.classes.test
 WBIndicators = Base.classes.world_bank_indicators
 Lat_lng_info = Base.classes.lat_long_info
 
 
->>>>>>> b19490cb1f57dee38af82e2c441b99de9fbbed9e
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
-<<<<<<< HEAD
-# Create routes for the different data needed
-@app.route("/")
-def home():
-    return render_template('index.html')
-
-@app.route('/api/data')
-def world_data():
-    session = Session(engine)
-    # Query the world bank info table and pull all the data
-    results = session.query(WBIndicators.country_name,WBIndicators.country_code,WBIndicators.series_name,WBIndicators.series_code,WBIndicators.years,WBIndicators.indicator_value).all()
-    result_df= pd.DataFrame(results)
-    session.close()
-    return result_df.to_json(orient ="records")
-=======
 
 
 # Create routes for the different data needed
@@ -96,18 +61,19 @@ def world_data():
     session.close()
     # return result_df.to_json(orient ="records")
     all_data =[]
-    for country_name,country_code,series_name,series_code,years,indicator_value in results:
+    for country_name,country_code,series_name,series_code,years,indicator_value in series:
         wb_dict ={}
-        wb_dict["country_name"]:country_name
-        wb_dict["country_code"]:country_code
-        wb_dict["series_name"]:series_name
-        wb_dict["years"]:years
-        wb_dict["indicator_value"]:indicator_value
+        wb_dict["country_name"]=country_name
+        wb_dict["country_code"]=country_code
+        wb_dict["series_name"]=series_name
+        wb_dict["series_code"]= series_code
+        wb_dict["years"]=years
+        wb_dict["indicator_value"]=indicator_value
 
         all_data.append(wb_dict)
 
     return jsonify(all_data)
->>>>>>> b19490cb1f57dee38af82e2c441b99de9fbbed9e
+
 
 @app.route("/api/data/<series>")
 def filter_series(series):
@@ -116,21 +82,6 @@ def filter_series(series):
     series = session.query(WBIndicators.country_name,WBIndicators.country_code,WBIndicators.series_name,WBIndicators.series_code,WBIndicators.years,WBIndicators.indicator_value).filter(WBIndicators.series_code == series)
     series_result_df = pd.DataFrame(series)
     session.close()
-<<<<<<< HEAD
-    return series_result_df.to_json(orient ="records")
-
-# @app.route("/api/data/<country_code>")
-# def filter_country(country_code):
-#     session = Session(engine)
-#     #filter series
-#     country_code = session.query(WBIndicators.country_name,WBIndicators.country_code,WBIndicators.series_name,WBIndicators.series_code,WBIndicators.years,WBIndicators.indicator_value).filter(WBIndicators.country_code == country_code)
-#     country_code_result_df = pd.DataFrame(country_code)
-#     session.close()
-#     return country_code_result_df.to_json(orient ="records")
-
-if __name__ == "__main__":
-    app.run(debug=True)
-=======
     # return series_result_df.to_json(orient ="records")
 
     # Create a dictionary from the row data and append to a list of all data
@@ -138,11 +89,11 @@ if __name__ == "__main__":
     all_data =[]
     for country_name,country_code,series_name,series_code,years,indicator_value in series:
         wb_dict ={}
-        wb_dict["country_name"]:country_name
-        wb_dict["country_code"]:country_code
-        wb_dict["series_name"]:series_name
-        wb_dict["years"]:years
-        wb_dict["indicator_value"]:indicator_value
+        wb_dict["country_name"]= country_name
+        wb_dict["country_code"]= country_code
+        wb_dict["series_name"]= series_name
+        wb_dict["years"]= years
+        wb_dict["indicator_value"]= indicator_value
 
         all_data.append(wb_dict)
 
@@ -200,4 +151,3 @@ def filter_series_lat_lng(series):
 
 if __name__ == "__main__":
     app.run(debug=True)
->>>>>>> b19490cb1f57dee38af82e2c441b99de9fbbed9e
