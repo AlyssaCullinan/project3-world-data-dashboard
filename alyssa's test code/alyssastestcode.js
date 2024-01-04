@@ -178,6 +178,7 @@ let lebanonLine = linechartfilterLebanon.map(d=>d[1])
 let sortedlineZimbabwe = linechartfilterZimbabwe.map(d=>d[1])
 
 // add the data to the datasets for the chart
+
 let lineChartData = {
     labels: linechartfilterZimbabwe.map(d=> d[2]),
     datasets: [
@@ -207,6 +208,68 @@ let lineChartData = {
     ]
 };
 
+let chosenCountry = 'Brazil'
+
+
+// linechart3
+
+
+
+
+// create variable for line chart filters
+
+
+
+
+
+let linechartfilterInflation = series_indicator.filter(d=> d[0]==="Inflation, consumer prices (annual %)" && d[3]== chosenCountry )
+let linechartfilterMilitaryExpenditure = series_indicator.filter(d=> d[0]==="Military expenditure (% of GDP)" && d[3]== chosenCountry )
+let linechartfilterGDP = series_indicator.filter(d=> d[0]==="GDP growth (annual %)" && d[3]== chosenCountry )
+let linechartfilterPopulation = series_indicator.filter(d=> d[0]==="Population growth (annual %)" && d[3]== chosenCountry )
+let linechartfilterUnemployment = series_indicator.filter(d=> d[0]==="Unemployment, total (% of total labor force) (national estimate)" && d[3]== chosenCountry )
+
+let inflation = linechartfilterInflation.map(d=>d[1])
+let military = linechartfilterMilitaryExpenditure.map(d=> d[1])
+let GDPgrowth = linechartfilterGDP.map(d=> d[1])
+let populationGrowth = linechartfilterPopulation.map(d=> d[1])
+let unemployment = linechartfilterUnemployment.map(d=> d[1])
+
+
+let linechart2data = {
+    labels: linechartfilterPopulation.map(d=> d[2]),
+    datasets: [
+        {
+            label: 'Inflation, consumer prices (annual %)',
+            data: inflation,
+            borderWidth: 1,
+        },
+        {
+            label: 'Military Expenditure (% of GDP)',
+            data: military,
+            borderWidth: 1,
+    
+        },
+        {
+            label: 'GDP Growth (annual%)',
+            data: GDPgrowth,
+            borderWidth: 1,
+
+        },
+        {
+            label: 'Population Growth (annual%)',
+            data: populationGrowth,
+            borderWidth: 1,
+            
+        },
+        {
+            label: 'Unemployment (% of total laborforce)(national estimate)',
+            data: unemployment,
+            borderWidth: 1,
+            
+        }
+    ]
+
+}
 // create an object for the % of GDP data which will be used in donut chart *need help from Erin to fix code error here*
 let donut_dict = data.reduce((obj,d)=>{
     if (d.series_name.includes("(% of GDP)")){
@@ -269,6 +332,28 @@ let lineOptions = {
         }
 
     }
+    let lineOptions2 = {
+        // indexAxis: 'y',
+        animation: false,
+        plugins: {
+            title: {
+              display: true, // enables the title
+              text: chosenCountry, // the title text
+              font: { // the title font
+                size: 20
+              },
+              color: 'black', // the title color
+              padding: 10 // the title padding
+            }
+          },
+        scales:{
+            x:{
+                // ticks:{
+                    // maxTicksLimit: 9
+                }
+            }
+    
+        }
 // format the bar chart
 let barOptions = {
     indexAxis: 'y',
@@ -318,7 +403,7 @@ let donutOptions = {
 let ctx = document.getElementById("myChart").getContext("2d");
 let ctx2 = document.getElementById("lineChart").getContext("2d");
 let ctx3 = document.getElementById("doughnutChart").getContext("2d");
-
+let ctx4 = document.getElementById("linechart2").getContext("2d");
 // create the barchart, donut, and line chart
 let myChart = new Chart (ctx, {
     type: "bar",
@@ -337,6 +422,13 @@ let mydoughnutChart = new Chart (ctx3, {
     type: "doughnut",
     data: doughnut_data,
     options: donutOptions
+
+});
+
+let linechart2= new Chart (ctx4, {
+    type: "line",
+    data: linechart2data,
+    options: lineOptions2
 
 });
 
@@ -467,6 +559,31 @@ let config2 = new Chart (scatterplot2, {
 // render the scatterplot chart
 config2.render()
 
+
+
+// filter data for a box plot
+let boxSudanFilter = series_indicator.filter(d => (d[0] == "GDP per capita (current US$)" && d[3]== 'Sudan'));
+let boxSouthSudanFilter = series_indicator.filter(d => (d[0] == "GDP per capita (current US$)" && d[3] == 'South Sudan'))
+// create a box plot with plotly
+let boxTrace = {
+    x:boxSudanFilter.map(d=>d[1]),
+    type: 'box',
+    name: 'Sudan' 
+
+}
+
+let boxTrace2 = {
+x:boxSudanFilter.map(d=>d[1]),
+type: 'box',
+name: 'South Sudan' 
+}
+
+let boxLayout = {
+title: "Box Plot of GDP Per Capita In Sudan and South Sudan"
+}
+
+boxData = [boxTrace, boxTrace2]
+Plotly.newPlot('boxplot', boxData, boxLayout)
 });
 
 
