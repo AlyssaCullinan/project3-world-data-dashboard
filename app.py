@@ -2,6 +2,7 @@
 from flask import Flask, jsonify, render_template
 # Python SQL toolkit and Object Relational Mapper
 import sqlalchemy
+from sqlalchemy import distinct,desc,asc
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, inspect
@@ -9,6 +10,7 @@ from config import PGUID, PGPASS, PGHOST, PGPORT, PGDB
 from decimal import Decimal
 import simplejson as json
 import pandas as pd
+from json import load
 
 #################################################
 # Database Setup
@@ -30,7 +32,7 @@ Base.prepare(autoload_with=engine)
 # print(Base.classes.keys())
 
 #Test = Base.classes.test
-WBIndicators = Base.classes.world_bank_indicators
+WBIndicators = Base.classes.world_bank_indicator
 Lat_lng_info = Base.classes.lat_long_info
 
 
@@ -74,6 +76,32 @@ def world_data():
         all_data.append(wb_dict)
 
     return jsonify(all_data)
+
+@app.route('/api/data/year')
+def world_data_years():
+    session = Session(engine)
+
+    # Query the world bank info table and pull all the distinct years
+    
+    results_years = session.query(distinct(WBIndicators.years)).order_by(desc(WBIndicators.years)).all()
+    result_years_list = [year[0] for year in results_years]
+    print(result_years_list)
+    session.close()
+    return jsonify(result_years_list)
+
+@app.route('/api/data/indicators')
+def world_data_indicators():
+    session = Session(engine)
+
+    # Query the world bank info table and pull all the distinct series codes and names
+    results_indicators = session.query(WBIndicators.series_code, WBIndicators.series_name).distinct().order_by(asc(WBIndicators.series_name)).all()
+    
+    # Convert the results to a list of dictionaries
+    result_indicators_list = [{'series_code': series_code, 'series_name': series_name} for series_code, series_name in results_indicators]
+
+    session.close()
+    return jsonify(result_indicators_list)
+
 
 @app.route("/api/data/<series>")
 def filter_series(series):
@@ -128,25 +156,40 @@ def filter_series_lat_lng(series):
     session.close()
     return series_lat_long_df.to_json(orient ="records")
 
+@app.route('/api/data/choropleth/<series>/<year>')
+def choropleth_population(series,year):
+    # print(series)
+    # print(year)
+
+    session = Session(engine)
+    population = session.query(WBIndicators.indicator_value,WBIndicators.country_name,WBIndicators.country_code,WBIndicators.years,WBIndicators.series_code,WBIndicators.series_name).filter(WBIndicators.series_code == series).filter(WBIndicators.years == year).all()
+
+    population_result_df = pd.DataFrame(population)
+    # print(population_result_df)
+    return population_result_df.to_json(orient ="records")
     # Create a dictionary from the row data and append to a list of all data
     
-    # all_data =[]
-    # for country_name,country_code,series_name,series_code,years,indicator_value,lat,lng in series_lat_long:
-    #     wb_dict ={}
-    #     wb_dict["country_name"]:country_name
-    #     wb_dict["country_code"]:country_code
-    #     wb_dict["series_name"]:series_name
-    #     wb_dict["series_code"]:series_name
-    #     wb_dict["years"]:years
-    #     wb_dict["indicator_value"]:indicator_value
-    #     wb_dict["lat"]:lat
-    #     wb_dict['lng']:lng
-
-    #     all_data.append(wb_dict)
-
+    all_data =[]
+    for country_name,country_code,series_name,series_code,years,indicator_value in population:
+        wb_dict ={}
+        wb_dict["country_name"]:country_name
+        wb_dict["country_code"]:country_code
+        wb_dict["series_name"]:series_name
+        wb_dict["series_code"]:series_code
+        wb_dict["years"]:years
+        wb_dict["indicator_value"]:indicator_value
+    
+        all_data.append(wb_dict)
+        print(all_data)
     # return jsonify(all_data)
 
 
+@app.route('/api/v2.0/choropleth/geo')
+def choropleth_geo():
+   with open('./countries.geo.json', 'r') as geo_file:
+    geo_data = load(geo_file)
+        
+    return jsonify(geo_data)
 
 
 if __name__ == "__main__":
