@@ -426,10 +426,10 @@ function getSelectedIndicator() {
 
 // #######################################################
 // create functions to sort the data
+// function sortDescending(a, b) {
+//   return b[1] - a[1];
+// }
 function sortDescending(a, b) {
-  return b[1] - a[1];
-}
-function sortAscending(a, b) {
   return  b.indicator_value - a.indicator_value;
 }
 
@@ -598,8 +598,8 @@ let scatterplot2 = document.getElementById("scatterplot").getContext("2d");
 let ybubble = filtered_data.filter((data) => data.series_name == selectedDataindicator).map((data) => data.indicator_value);
 let xbubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
 // let sortedCountrybubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
-let sortedx = xbubble.sort(sortAscending).slice(0,50);
-let sortedy = ybubble.sort(sortAscending).slice(0,50);
+let sortedx = xbubble.sort(sortDescending).slice(0,50);
+let sortedy = ybubble.sort(sortDescending).slice(0,50);
 // let sortedCountries = sortedCountrybubble.sort(sortAscending).slice(0,50);
 
 
@@ -660,7 +660,7 @@ let config2 = new Chart (scatterplot2, {
             },
             title: {
               display: true, // enables the title
-              text: "Top 30: GDP Growth (annual %) vs." + ' ' + selectedDataindicator + ' in ' + selectedDatayear, // the title text
+              text: "Top 30 Countries: GDP Growth (annual %) vs." + ' ' + selectedDataindicator + ' in ' + selectedDatayear, // the title text
               font: {
                 // the title font
                 size: 20,
