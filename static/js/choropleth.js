@@ -439,7 +439,7 @@ function sortAscending(a, b) {
 
 function create_bar(selectedSeries, selectedYear) {
   // select only the top 10 countries
-  let sortedData = indicatorData.sort((a,b) => a.indicator_value - b.indicator_value).slice(0, 10)
+  let sortedData = indicatorData.sort((a,b) => b.indicator_value - a.indicator_value).slice(0, 10)
 // console.log(barSortAscending)
   // let sortedData = indicatorData.sort(sortDescending).slice(0, 10);
   // create a variable for the  series indicator value and a variable for the country
