@@ -11,6 +11,11 @@ let selectedDatayear;
 let selectedDataindicator;
 let wholeData;
 let selectedDataindictorName;
+let indicatorValues = [];
+let minIndicatorValue = 0;
+let maxIndicatorValue = 0;
+let chartData;
+// let colorScales;
 // export {
 //   selectedCountry,
 //   selectedDataindicator,
@@ -20,7 +25,7 @@ let selectedDataindictorName;
 
 // Function that fetches the indicator value for a given country code and indicator
 function getIndicatorValue(countryCode, data, selectedIndicator) {
-  selectedCountry = countryCode;
+  // selectedCountry = countryCode;
   // console.log(countryCode);
   const countryData = data.find((entry) => entry.country_code === countryCode);
   // console.log(countryData);
@@ -30,25 +35,132 @@ function getIndicatorValue(countryCode, data, selectedIndicator) {
   // return countryData ? countryData[selectedIndicator] : 0;
 }
 
+function colorScales(indicatorValue, indicator) {
+  // console.log(indicator);
+
+  // Calculate the dynamic domain based on the indicator values
+  minIndicatorValue = d3.min(indicatorValues);
+  maxIndicatorValue = d3.max(indicatorValues);
+
+  const mid1 =
+    minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (1 / 7);
+  const mid2 =
+    minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (2 / 7);
+  const mid3 =
+    minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (3 / 7);
+  const mid4 =
+    minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (4 / 7);
+  const mid5 =
+    minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (5 / 7);
+  const mid6 =
+    minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (6 / 7);
+  const mid7 = maxIndicatorValue;
+
+  if (indicator === "GC.DOD.TOTL.GD.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, 50, 60, 70, 80, 90, maxIndicatorValue])
+      .range([
+        " #f7fcb9",
+        "#addd8e",
+        "#78c679",
+        "#41ab5d",
+        "#238443",
+        "#006837",
+        "#004529",
+      ]);
+  } else if (indicator === "NE.EXP.GNFS.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, 20, 30, 40, 50, 60, 80, maxIndicatorValue])
+      .range([
+        "#fdae61",
+        "#fee08b",
+        "#d73027",
+        "#4575b4",
+        "#91bfdb",
+        "#313695",
+        "#a50026",
+        "#313695",
+      ]);
+  } else if (indicator === "NY.GDP.MKTP.KD.ZG") {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, 2, 3, 4, 5, 6, 7, maxIndicatorValue])
+      .range([
+        "#FFEDA0", // Pale yellow for populations less than 20 million
+        "#FED976", // Light yellow for populations greater than or equal to 20 million
+        "#FEB24C", // Yellow for populations greater than or equal to 50 million
+        "#E31A1C", // Light orange for populations greater than or equal to 100 million
+        "#FC4E2A", // Orange for populations greater than or equal to 200 million
+        "#FD8D3C", // Dark orange for populations greater than or equal to 500 million
+        "#B2D732", // Light green for populations greater than or equal to 1 billion
+        "#6ECC19",
+      ]);
+  } else if (indicator === "SP.POP.TOTL" || indicator == "MS.MIL.XPND.CD") {
+    return d3
+      .scaleLinear()
+      .domain([
+        20000000,
+        50000000,
+        100000000,
+        200000000,
+        500000000,
+        1000000000,
+        2000000000,
+        maxIndicatorValue,
+      ])
+      .range([
+        "#FFEDA0", // Pale yellow for populations less than 20 million
+        "#FED976", // Light yellow for populations greater than or equal to 20 million
+        "#FEB24C", // Yellow for populations greater than or equal to 50 million
+        "#FD8D3C", // Dark orange for populations greater than or equal to 100 million
+        "#FC4E2A", // Orange for populations greater than or equal to 200 million
+        "#E31A1C", // Orange-red for populations greater than or equal to 500 million
+        "#BD0026", // Dark red for populations greater than or equal to 1 billion
+        "#800026", // Red for populations greater than or equal to 2 billion
+      ]);
+  } else {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, maxIndicatorValue])
+      .range(["#CCCCCC", "#CCCCCC"]); // Default scale if indicator is not found
+  }
+}
+
 // Function to add color based on population amount
 function getColor(indicatorValue, indicator) {
-  // console.log(indicator);
-  // console.log(indicatorValue);
-  return indicatorValue >= 2000000000
-    ? "#800026" // Red for populations greater than or equal to 2 billion
-    : indicatorValue >= 1000000000
-    ? "#BD0026" // Dark red for populations greater than or equal to 1 billion
-    : indicatorValue >= 500000000
-    ? "#E31A1C" // Orange-red for populations greater than or equal to 500 million
-    : indicatorValue >= 200000000
-    ? "#FC4E2A" // Orange for populations greater than or equal to 200 million
-    : indicatorValue >= 100000000
-    ? "#FD8D3C" // Dark orange for populations greater than or equal to 100 million
-    : indicatorValue >= 50000000
-    ? "#FEB24C" // Yellow for populations greater than or equal to 50 million
-    : indicatorValue >= 20000000
-    ? "#FED976" // Light yellow for populations greater than or equal to 20 million
-    : "#FFEDA0"; // Pale yellow for populations less than 20 million
+  if (indicatorValue) {
+    indicatorValues.push(indicatorValue);
+  }
+  // console.log(indicatorValues);
+
+  if (indicatorValues.length === 0) {
+    // No data available, return a default color
+    return "#CCCCCC"; // You can change this to your preferred default color
+  }
+
+  const scale = colorScales(indicatorValue, indicator);
+
+  return scale(indicatorValue);
+
+  // console.log(minIndicatorValue);
+
+  // return indicatorValue >= 2000000000
+  //   ? "#800026" // Red for populations greater than or equal to 2 billion
+  //   : indicatorValue >= 1000000000
+  //   ? "#BD0026" // Dark red for populations greater than or equal to 1 billion
+  //   : indicatorValue >= 500000000
+  //   ? "#E31A1C" // Orange-red for populations greater than or equal to 500 million
+  //   : indicatorValue >= 200000000
+  //   ? "#FC4E2A" // Orange for populations greater than or equal to 200 million
+  //   : indicatorValue >= 100000000
+  //   ? "#FD8D3C" // Dark orange for populations greater than or equal to 100 million
+  //   : indicatorValue >= 50000000
+  //   ? "#FEB24C" // Yellow for populations greater than or equal to 50 million
+  //   : indicatorValue >= 20000000
+  //   ? "#FED976" // Light yellow for populations greater than or equal to 20 million
+  //   : "#FFEDA0"; // Pale yellow for populations less than 20 million
 }
 
 // Function to style the GeoJSON features
@@ -59,7 +171,7 @@ function style(feature) {
     indicatorData,
     selectedIndicator
   );
-  // console.log(selectedIndicator);
+  // console.log(indicator);
 
   return {
     fillColor: getColor(indicator[0], selectedIndicator),
@@ -84,14 +196,18 @@ function highlightFeature(e) {
   }
 
   const indicator = getIndicatorValue(layer.feature.id, indicatorData);
-  // console.log(selectedCountry);
+  // console.log(layer.feature);
+  selectedCountry = layer.feature.id;
+
   const popupContent =
     "<b>" +
     layer.feature.properties.name +
     "</b><br/>" +
-    (indicator[0] ? formatPopulation(indicator[0]) : "No data available");
-
+    // (indicator[0] ? formatPopulation(indicator[0]) : "No data available");
+    (indicator[0] ? indicator[0] : "No data available");
   layer.bindPopup(popupContent).openPopup();
+
+  linechart(selectedCountry, selectedDataindictorName);
 }
 
 function resetHighlight(e) {
@@ -231,6 +347,7 @@ async function init() {
     boxZoom: false, // Disable box zoom
     keyboard: false, // Disable keyboard navigation
     maxZoom: 7, // Set the maximum zoom level
+    //backgroundColor: "#f0f0f0",
   });
 
   // Add tile layer
@@ -248,13 +365,18 @@ async function init() {
 
     // Set default selections
     selectedDatayear = d3.select("#selDatayear").property("value");
-    selectedDataindicator = d3.select("#selDataindicator").property("value");
+    // selectedDataindicator = d3.select("#selDataindicator").property("value");
+    selectedDataindictorName = d3
+      .select("#selDataindicator option:checked")
+      .text();
 
     // console.log(selectedDataindicator);
     // console.log(indicator[0].series_code);
     await choropleth(year[0], indicator[0].series_code);
     if (wholeData) {
-      create_bar(indicator[0].series_name, indicator[0].year);
+      // console.log(year);
+      create_bar(selectedDataindictorName, selectedDatayear);
+      linechart("USA", selectedDataindictorName);
     } else {
       console.error("Error initializing: wholeData is undefined");
     }
@@ -271,10 +393,11 @@ async function updateMap() {
     .select("#selDataindicator option:checked")
     .text();
 
-  console.log(selectedDataindictorName);
+  // console.log(selectedDataindictorName);
 
   await choropleth(selectedDatayear, selectedDataindicator);
   create_bar(selectedDataindictorName, selectedDatayear);
+  linechart("USA", selectedDataindictorName);
 }
 
 // Example function when dropdown values are changed
@@ -309,16 +432,6 @@ function sortAscending(a, b) {
 }
 
 function create_bar(selectedSeries, selectedYear) {
-  // console.log(selectedSeries, selectedYear);
-  console.log(indicatorData);
-  console.log(selectedSeries);
-
-  // create a filter for the selected series
-  // let filtered_data = indicatorData.filter(
-  //   (d) => d[4] === selectedSeries && d[5] === selectedYear
-  // );
-
-  // console.log(filtered_data);
   // select only the top 10 countries
   let sortedData = indicatorData.sort(sortDescending).slice(0, 10);
   // create a variable for the  series indicator value and a variable for the country
@@ -350,35 +463,117 @@ function create_bar(selectedSeries, selectedYear) {
   // create the layout
   let barLayout = {
     // make the title auto-update depending on the selected year and series
-    title:
-      "The Top 10: Bar Chart of " + selectedSeries + " " + "in " + selectedYear,
-    // width: 400,
+    title: "Top 10 " + selectedSeries + " " + "in " + selectedYear,
+    height: 300,
+    // width: 475,
     xaxis: {
       // add the range slider to the bottom of the graph
       title: "Country Name",
       // sort the bar chart in ascending order
       categoryorder: "total ascending",
-      // rangeselector: {
-      //     buttons: [
-      //         {count: 1, label: '1y', step: 'year', stepmode: 'backward'},{step: 'all'}
-      //     ]
-      // },
-      // rangeslider:{},
-      // autorange:true,
+      automargin: true,
     },
     yaxis: {
       title: selectedSeries,
+      automargin: true,
     },
+    modebar: {
+      // Remove the buttons you don't want
+      orientation: "h",
+      modeBarButtonsToRemove: [],
+    },
+    hovermode: false, // Disable hover interactions
+    autosize: false,
   };
 
   let top10BarData = [trace];
-  Plotly.newPlot("line_chart", top10BarData, barLayout);
+  Plotly.newPlot("bar_chart", top10BarData, barLayout);
 }
 
-// call bar chart function - later replace parameters with variable for year and series indicator drop downs
-// create_bar(selectedDataindicator, 2021);
-
 // #######################################################
+function linechartData() {
+  return new Promise((resolve, reject) => {
+    let chartData; // Declare chartData within the scope of the promise
+
+    d3.json(`/api/data`)
+      .then((data) => {
+        chartData = data;
+        // console.log(chartData); // Move inside the 'then' block to log after data is fetched
+        resolve(chartData);
+      })
+      .catch(reject);
+  });
+}
+
+async function linechart(selectedCountry, selectedDataindictorName) {
+  console.log(selectedCountry);
+  let chartData = await linechartData();
+  // console.log(chartData);
+
+  // console.log(chartData);
+
+  let linechart3filter = chartData.filter(
+    (data) =>
+      data.country_code === selectedCountry &&
+      data.series_name === selectedDataindictorName
+  );
+  // / map the data for the labels
+  let chartedLabels = linechart3filter.map((data) => data.years);
+  let linechartvalues = linechart3filter.map((data) => data.indicator_value);
+
+  // add the dataset to the dataset param
+  let linechart3_data = {
+    labels: chartedLabels,
+    datasets: [
+      { label: selectedCountry, data: linechartvalues, borderWidth: 1 },
+    ],
+  };
+  let lineOptions3 = {
+    // indexAxis: 'y',
+    animation: false,
+    plugins: {
+      title: {
+        display: true, // enables the title
+        text: "Line Chart", // the title text
+        font: {
+          // the title font
+          size: 20,
+        },
+        color: "black", // the title color
+        padding: 10, // the title padding
+      },
+    },
+    scales: {
+      x: {
+        // ticks:{
+        // maxTicksLimit: 9
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  const existingChart = Chart.getChart(document.getElementById("lineChart"));
+  if (existingChart) {
+    // Destroy the existing chart if it exists
+    existingChart.destroy();
+  }
+  let ctx = document.getElementById("lineChart").getContext("2d");
+
+  let mylineChart5 = new Chart(ctx, {
+    type: "line",
+    data: linechart3_data,
+    options: lineOptions3,
+  });
+}
+
+// ############################################################
 
 document.addEventListener("DOMContentLoaded", function () {
   init();

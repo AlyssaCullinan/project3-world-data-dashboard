@@ -64,7 +64,7 @@ h1 {
   width: 100%;
   /* margin-right: auto;
   margin-left: auto; */
-  padding: 0px;
+  padding: 0, 30px;
 }
 
 .container {
@@ -75,11 +75,11 @@ h1 {
   margin: 50px;
 }
 
-.section_container {
+/* .section_container {
   margin: 0px, 75px;
-  padding-left: 25px;
-  padding-right: 25px;
-}
+  padding-left: 40px;
+  padding-right: 40px;
+} */
 
 #selDatayear {
   margin: 5px;
@@ -118,7 +118,7 @@ h1 {
 
 #map-container {
   position: relative;
-  height: 400px; /* Set the desired height */
+  height: 300px; /* Set the desired height */
   background-color: #e0e0e0; /* Set your desired background color */
   overflow: hidden;
 }
@@ -126,10 +126,19 @@ h1 {
 #map {
   height: 100%;
   width: 100%;
+  background-color: #f0f0f0;
 }
 
 /* Add this CSS to ensure the map container has a fixed size */
 .leaflet-container {
   height: 100% !important;
   width: 100% !important;
+}
+
+#jumbotron {
+  background-image: url(https://www.worldbank.org/content/dam/photos/780x439/2017/oct-3/GFDR-2017-cover-animated.gif);
+  background-size: cover;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 0;
 }
