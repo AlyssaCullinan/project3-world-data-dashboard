@@ -2,10 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>World Data Indicators</title>
 
@@ -31,7 +27,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <!-- Leaflet heatmap plugin-->
-    <!-- <script type="text/javascript" src="../static/js/leaftlet-heat.js"></script> -->
+    <script type="text/javascript" src="../static/js/leaftlet-heat.js"></script>
 
     <!-- Bootstrap CSS via CDN -->
     <link
@@ -52,7 +48,27 @@
     <!-- Your Heatmap JavaScript file -->
     <!-- <script type="text/javascript" src="../static/script.js"></script> -->
     <script type="text/javascript" src="../static/js/choropleth.js"></script>
-    <!-- <script type="module" src="../static/js/barchart.js"></script> -->
+    <!-- <script type="module">
+      import { optionChanged, updateMap } from "../static/js/main.js";
+
+      // document
+      //   .getElementById("selDatayear")
+      //   .addEventListener("change", function (event) {
+      //     optionChanged("year", event.target.value);
+      //   });
+
+      // document
+      //   .getElementById("selDataindicator")
+      //   .addEventListener("change", function (event) {
+      //     optionChanged("indicator", event.target.value);
+      //   });
+
+      // document.getElementById("btn").addEventListener("click", function () {
+      //   updateMap();
+      // });
+    </script> -->
+
+    <!-- <script type="module" src="../static/js/main.js" defer></script> -->
   </head>
 
   <body>
@@ -104,28 +120,30 @@
 
             <!-- Map and Left Column Row -->
             <div class="row">
-              <div id="left-column" class="col-md-8 mx-auto">
+              <div id="left-column" class="col-md-8">
                 <div class="card mb-3">
-                  <div id="map-container">
-                    <div id="map" class="card-body"></div>
+                  <div class="card-body" style="padding: 10px">
+                    <div id="map-container">
+                      <div id="map" class="card-body"></div>
+                    </div>
                   </div>
                 </div>
 
                 <!-- -------------------- -->
                 <div class="row">
-                  <div class="col-md-4 mx-auto">
+                  <div class="col-md-6 mt-3">
                     <div class="card mb-3">
                       <div class="card-body">
-                        <canvas id="donutchart"></canvas>
-                        <!-- Add content for the first card in the left column here -->
+                        <div id="scatter_plot">
+                          <canvas id="scatterplot"></canvas>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4 mx-auto">
+                  <div class="col-md-6 mt-3">
                     <div class="card mb-3">
-                      <div id="scatter_plot" class="card-body">
-                        <canvas id="scatterplot"></canvas>
-                        <!-- Add content for the first card in the left column here -->
+                      <div class="card-body">
+                        <div id="plot"></div>
                       </div>
                     </div>
                   </div>
@@ -144,7 +162,7 @@
                   <div
                     id="bar_chart"
                     class="card-body"
-                    style="height: 350px; width: 100%; overflow: auto"
+                    style="height: 450px; width: 100%; overflow: hidden"
                   ></div>
                 </div>
               </div>

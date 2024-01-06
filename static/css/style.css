@@ -129,6 +129,12 @@ h1 {
   background-color: #f0f0f0;
 }
 
+#scatter_plot {
+  height: 300px;
+  width: 100%;
+  /* overflow: hidden; */
+}
+
 /* Add this CSS to ensure the map container has a fixed size */
 .leaflet-container {
   height: 100% !important;
