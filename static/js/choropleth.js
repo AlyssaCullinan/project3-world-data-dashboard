@@ -169,7 +169,7 @@ function style(feature) {
   const indicator = getIndicatorValue(
     feature.id,
     indicatorData,
-    selectedIndicator
+    selectedIndicator,
   );
   // console.log(indicator);
 
@@ -379,7 +379,7 @@ async function init() {
       create_bar(selectedDataindictorName, selectedDatayear);
       linechart("USA", selectedDataindictorName);
       scatterplot(selectedDataindictorName,selectedDatayear);
-      create_donut_chart(selectedCountry, selectedDatayear);
+      create_donut_chart("USA", selectedDatayear);
     } else {
       console.error("Error initializing: wholeData is undefined");
     }
@@ -402,7 +402,7 @@ async function updateMap() {
   create_bar(selectedDataindictorName, selectedDatayear);
   linechart("USA", selectedDataindictorName);
   scatterplot(selectedDataindictorName,selectedDatayear);
-  create_donut_chart(selectedCountry, selectedDatayear);
+  create_donut_chart("USA", selectedDatayear);
 }
 
 // Example function when dropdown values are changed
@@ -564,8 +564,6 @@ async function linechart(selectedCountry, selectedDataindictorName) {
     ],
   };
   let lineOptions3 = {
-    // indexAxis: 'y',
-    // responsive: false,
     animation: false,
     plugins: {
       title: {
@@ -581,18 +579,26 @@ async function linechart(selectedCountry, selectedDataindictorName) {
     },
     scales: {
       x: {
-        // ticks:{
-        // maxTicksLimit: 9
         grid: {
           display: false,
         },
+        title:{
+          display: true,
+          text: 'Years'
+        }
       },
+      
+    
       y: {
         grid: {
-          display: false,
+          display: false
         },
-      },
-    },
+        title:{
+          display: true,
+          text: selectedDataindictorName
+            }
+          },
+        },
   };
 
   const existingChart = Chart.getChart(document.getElementById("lineChart"));
@@ -694,19 +700,20 @@ async function scatterplot(selectedDataindicator, selectedDatayear) {
           display: false,
           responsive: true,
           maintainAspectRatio: false, // This might be used instead of aspectRatio
-          width: 400,
+          // height: 800,
+          // width: 300,
         },
         title: {
           display: true, // enables the title
           text:
-            "Top 30 Countries: GDP Growth (annual %) vs." +
+            "Top 30: GDP growth (annual %) vs." +
             " " +
             selectedDataindicator +
             " in " +
             selectedDatayear, // the title text
           font: {
             // the title font
-            size: 20,
+            size: 15,
           },
           color: "black", // the title color
           padding: 10, // the title padding
@@ -746,138 +753,100 @@ scatterplot(selectedDatayear, selectedDataindictorName);
 // ############################################################
 // create Charts.JS Scatter Plot
 
-async function scatterplot(selectedDataindicator, selectedDatayear) {
-  // console.log(selectedCountry);
-  let chartData = await linechartData();
-// filter data for ChartsJS scatterplot
-let filtered_data = chartData.filter((data) => (data.series_name == selectedDataindicator || data.series_name == "GDP growth (annual %)" || data.series_name== "Population, total") && data.years == selectedDatayear);
+// async function scatterplot(selectedDataindicator, selectedDatayear) {
+//   // console.log(selectedCountry);
+//   let chartData = await linechartData();
+// // filter data for ChartsJS scatterplot
+// let filtered_data = chartData.filter((data) => (data.series_name == selectedDataindicator || data.series_name == "GDP growth (annual %)" || data.series_name== "Population, total") && data.years == selectedDatayear);
 
-let scatterplot2 = document.getElementById("scatterplot").getContext("2d");
-// let sizerefbubble = 2.0 * Math.max(...filtered_data3.map(d => d[4]))/(40**2)
-let ybubble = filtered_data.filter((data) => data.series_name == selectedDataindicator).map((data) => data.indicator_value);
-let xbubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
-// let sortedCountrybubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
-let sortedx = xbubble.sort(sortDescending).slice(0,50);
-let sortedy = ybubble.sort(sortDescending).slice(0,50);
-// let sortedCountries = sortedCountrybubble.sort(sortAscending).slice(0,50);
+// let scatterplot2 = document.getElementById("scatterplot").getContext("2d");
+// // let sizerefbubble = 2.0 * Math.max(...filtered_data3.map(d => d[4]))/(40**2)
+// let ybubble = filtered_data.filter((data) => data.series_name == selectedDataindicator).map((data) => data.indicator_value);
+// let xbubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
+// // let sortedCountrybubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
+// let sortedx = xbubble.sort(sortDescending).slice(0,50);
+// let sortedy = ybubble.sort(sortDescending).slice(0,50);
+// // let sortedCountries = sortedCountrybubble.sort(sortAscending).slice(0,50);
 
 
-// let sortedCustomData = filtered_data.map((data) => data.country_name).sort(sortAscending).slice(0,30)
-let scatterData = filtered_data.map((d,i)=>({
-    x:sortedx[i],
-    y:sortedy[i],
-    country: d.country_name
-    // sizeref: sizerefbubble,
-    // sizemode: 'area'
-// function calculateBubbleRadius(radius){
-//   return Math.sqrt(radius)/1000
-}))
-// let scatterData = [];
-// for (let i = 0; i < filtered_data.length; i += 2) {
-//   let xIndex = i;
-//   let yIndex = i + 1;
- 
-// let xValue = filtered_data[xIndex]?.series_name === selectedDataindicator ? filtered_data[xIndex].indicator_value : null;
-// let yValue= filtered_data[yIndex]?.series_name === "GDP growth (annual %)" ? filtered_data[yIndex].indicator_value : null;
-// let rValue= filtered_data[yIndex]?.series_name === "Population, total" ? calculateBubbleRadius(filtered_data[yIndex].indicator_value) : null;
+// // let sortedCustomData = filtered_data.map((data) => data.country_name).sort(sortAscending).slice(0,30)
+// let scatterData = filtered_data.map((d,i)=>({
+//     x:sortedx[i],
+//     y:sortedy[i],
+//     country: d.country_name
 
-// scatterData.push({
-//   x:xValue,
-//   y:yValue,
-//   r:rValue
+// }))
 
-// });
+// const existingscatterChart = Chart.getChart(document.getElementById("scatterplot"));
+// if (existingscatterChart) {
+//   // Destroy the existing chart if it exists
+//   existingscatterChart.destroy();
 // }
-
-// console.log("scatter",scatterData)
-// }));
-// console.log()
-// console.log("data6", filtered_data3)
-const existingscatterChart = Chart.getChart(document.getElementById("scatterplot"));
-if (existingscatterChart) {
-  // Destroy the existing chart if it exists
-  existingscatterChart.destroy();
-}
-let config2 = new Chart (scatterplot2, {
-    type: "bubble",
-    data:{
-        datasets: [
-            {
-                // label: selectedDatayear,
-                data: scatterData,
-                borderWidth: 2,
-                showLine: true,
-                hovertemplate: 'Country: <%= dataset.data[i].country%>'
-                // customdata: sortedCustomData.map((data,i) => data.country_name) // country name
-            }
-        ]
-    },
-    options:{
-        plugins:{
-            legend:{
-                display:false
-            },
-            title: {
-              display: true, // enables the title
-              text: "Top 30 Countries: GDP Growth (annual %) vs." + ' ' + selectedDataindicator + ' in ' + selectedDatayear, // the title text
-              font: {
-                // the title font
-                size: 20,
-              },
-              color: "black", // the title color
-              padding: 10, // the title padding
-            },
-          },
+// let config2 = new Chart (scatterplot2, {
+//     type: "bubble",
+//     data:{
+//         datasets: [
+//             {
+//                 // label: selectedDatayear,
+//                 data: scatterData,
+//                 borderWidth: 2,
+//                 showLine: true,
+//                 hovertemplate: 'Country: <%= dataset.data[i].country%>'
+//                 // customdata: sortedCustomData.map((data,i) => data.country_name) // country name
+//             }
+//         ]
+//     },
+//     options:{
+//         plugins:{
+//             legend:{
+//                 display:false
+//             },
+//             title: {
+//               display: true, // enables the title
+//               text: "Top 30: GDP growth (annual %) vs." + ' ' + selectedDataindicator + ' in ' + selectedDatayear, // the title text
+//               font: {
+//                 // the title font
+//                 size: 20,
+//               },
+//               color: "black", // the title color
+//               padding: 10, // the title padding
+//             },
+//           },
 
         
-        aspectRatio: 1,
+//         aspectRatio: 1,
         
-    scales:{
-        x:{
-            title:{
-                display: true,
-                text: selectedDataindicator
-            },
-            autorange: true,
-            ticks:{
-                stepSize:1
-            }
-        },
-        y: {
-            title:{
-                display: true,
-                text: "GDP growth (annual %)"
-            },
-           autorange: true,
-            ticks:{
-                stepSize:1
-            }
-        }
-        }
-    },
-    }
+//     scales:{
+//         x:{
+//             title:{
+//                 display: true,
+//                 text: selectedDataindicator
+//             },
+//             autorange: true,
+//             ticks:{
+//                 stepSize:1
+//             }
+//         },
+//         y: {
+//             title:{
+//                 display: true,
+//                 text: "GDP growth (annual %)"
+//             },
+//            autorange: true,
+//             ticks:{
+//                 stepSize:1
+//             }
+//         }
+//         }
+//     },
+//     }
 
-);
-// render the scatterplot chart
-config2.render()
-  }
-scatterplot(selectedDatayear, selectedDataindictorName)
+// );
+// // render the scatterplot chart
+// config2.render()
+//   }
+// scatterplot(selectedDatayear, selectedDataindictorName)
 // ############################################################
-function getDonutchartData() {
-  return new Promise((resolve, reject) => {
-    let donutChartData; // Declare chartData within the scope of the promise
-
-    d3.json(`/api/data/GDPdata`)
-      .then((data) => {
-        donutChartData = data;
-        resolve(donutChartData);
-      })
-      .catch(reject);
-      
-  });
-  
-}
-
 
 function getDonutchartData() {
   return new Promise((resolve, reject) => {
@@ -901,12 +870,12 @@ function getDonutchartData() {
   
 }
 
-getDonutchartData()
 
 async function create_donut_chart(selectedCountry, selectedDatayear){
-let donutChartData = await getDonutchartData();
-let donutFilter = donutChartData.filter((data) => data.country_code === selectedCountry && data.years === selectedDatayear)
-console.log("fillteerrrr",donutFilter);
+  
+  let donutChartData = await getDonutchartData();
+  let donutFilter = donutChartData.filter((data) => data.country_code == selectedCountry && data.years == selectedDatayear)
+  console.log("donut filter",donutFilter);
   if (donutFilter.length === 0){
     console.log("no data found")
 }
@@ -925,17 +894,30 @@ let donut_data =  {
   };
 
 let donutOptions = {
-  animation: true,
+  animation	: true,
+  scale: {
+       ticks: {
+      fontSize: 10, // Set font size for scale ticks
+    },
+  },
+  borderAlign: 'inner',
   plugins: {
+    legend: true,
+    labels:{
+      fontColor:'black',
+      fontSize:7,
+      
+    },
+    fontColor:'black',
       title: {
         display: true, // enables the title
-        text: selectedCountry, // the title text
+        text: "Polar Area Chart for " + selectedCountry + ' in ' + selectedDatayear, // the title text
         font: { // the title font
-          size: 20
+          size: 15
         },
-        color: 'black', // the title color
-        padding: 10 // the title padding
+        
       }
+      
     }
 
     
@@ -960,7 +942,7 @@ let mydonutChart = new Chart (ctx, {
 
 
 // create_donut_chart("ARG",2018)
-create_donut_chart(selectedCountry, selectedDatayear)
+// create_donut_chart("USA", "2020")
 
 
 
