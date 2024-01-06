@@ -377,6 +377,7 @@ async function init() {
       // console.log(year);
       create_bar(selectedDataindictorName, selectedDatayear);
       linechart("USA", selectedDataindictorName);
+      scatterplot(selectedDataindictorName, selectedDatayear);
     } else {
       console.error("Error initializing: wholeData is undefined");
     }
@@ -398,6 +399,7 @@ async function updateMap() {
   await choropleth(selectedDatayear, selectedDataindicator);
   create_bar(selectedDataindictorName, selectedDatayear);
   linechart("USA", selectedDataindictorName);
+  scatterplot(selectedDataindictorName, selectedDatayear);
 }
 
 // Example function when dropdown values are changed
@@ -424,17 +426,25 @@ function getSelectedIndicator() {
 
 // #######################################################
 // create functions to sort the data
+// function sortDescending(a, b) {
+//   return b[1] - a[1];
+// }
 function sortDescending(a, b) {
-  return b[1] - a[1];
+  return b.indicator_value - a.indicator_value;
 }
-function sortAscending(a, b) {
-  return a[1] - b[1];
-}
+
+// let barSortAscending = indicatorData.sort((a,b) => a.indicator_value - b.indicator_value)
+// console.log(barSortAscending)
 
 function create_bar(selectedSeries, selectedYear) {
   // select only the top 10 countries
-  let sortedData = indicatorData.sort(sortDescending).slice(0, 10);
+  let sortedData = indicatorData
+    .sort((a, b) => b.indicator_value - a.indicator_value)
+    .slice(0, 10);
+  // console.log(barSortAscending)
+  // let sortedData = indicatorData.sort(sortDescending).slice(0, 10);
   // create a variable for the  series indicator value and a variable for the country
+
   // console.log(sortedData);
   let indicator_val = sortedData.map((d) => d.indicator_value);
   // console.log(indicator_val);
@@ -463,19 +473,39 @@ function create_bar(selectedSeries, selectedYear) {
   // create the layout
   let barLayout = {
     // make the title auto-update depending on the selected year and series
-    title: "Top 10 " + selectedSeries + " " + "in " + selectedYear,
-    height: 300,
-    // width: 475,
+
+    title: {
+      text: "Top 10 " + selectedSeries,
+      font: {
+        size: 12, // Adjust the font size for the x-axis title
+      },
+    },
+    width: 570,
     xaxis: {
       // add the range slider to the bottom of the graph
-      title: "Country Name",
+      title: {
+        text: "Country Name",
+        font: {
+          size: 10, // Adjust the font size for the x-axis title
+        },
+      },
+
+      tickfont: {
+        size: 10, // Adjust the font size for the y-axis labels
+      },
       // sort the bar chart in ascending order
       categoryorder: "total ascending",
       automargin: true,
     },
     yaxis: {
-      title: selectedSeries,
-      automargin: true,
+      title: {
+        text: selectedSeries,
+        font: {
+          size: 12, // Adjust the font size for the x-axis title
+        },
+      },
+
+      // automargin: true,
     },
     modebar: {
       // Remove the buttons you don't want
@@ -506,7 +536,7 @@ function linechartData() {
 }
 
 async function linechart(selectedCountry, selectedDataindictorName) {
-  console.log(selectedCountry);
+  // console.log(selectedCountry);
   let chartData = await linechartData();
   // console.log(chartData);
 
@@ -530,6 +560,7 @@ async function linechart(selectedCountry, selectedDataindictorName) {
   };
   let lineOptions3 = {
     // indexAxis: 'y',
+    // responsive: false,
     animation: false,
     plugins: {
       title: {
@@ -572,7 +603,141 @@ async function linechart(selectedCountry, selectedDataindictorName) {
     options: lineOptions3,
   });
 }
+// ############################################################
+// create Charts.JS Scatter Plot
 
+async function scatterplot(selectedDataindicator, selectedDatayear) {
+  // console.log(selectedCountry);
+  let chartData = await linechartData();
+  // filter data for ChartsJS scatterplot
+  let filtered_data = chartData.filter(
+    (data) =>
+      (data.series_name == selectedDataindicator ||
+        data.series_name == "GDP growth (annual %)" ||
+        data.series_name == "Population, total") &&
+      data.years == selectedDatayear
+  );
+
+  let scatterplot2 = document.getElementById("scatterplot").getContext("2d");
+  // let sizerefbubble = 2.0 * Math.max(...filtered_data3.map(d => d[4]))/(40**2)
+  let ybubble = filtered_data
+    .filter((data) => data.series_name == selectedDataindicator)
+    .map((data) => data.indicator_value);
+  let xbubble = filtered_data
+    .filter((data) => data.series_name == "GDP growth (annual %)")
+    .map((data) => data.indicator_value);
+  // let sortedCountrybubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
+  let sortedx = xbubble.sort(sortDescending).slice(0, 50);
+  let sortedy = ybubble.sort(sortDescending).slice(0, 50);
+  // let sortedCountries = sortedCountrybubble.sort(sortAscending).slice(0,50);
+
+  // let sortedCustomData = filtered_data.map((data) => data.country_name).sort(sortAscending).slice(0,30)
+  let scatterData = filtered_data.map((d, i) => ({
+    x: sortedx[i],
+    y: sortedy[i],
+    country: d.country_name,
+    // sizeref: sizerefbubble,
+    // sizemode: 'area'
+    // function calculateBubbleRadius(radius){
+    //   return Math.sqrt(radius)/1000
+  }));
+  // let scatterData = [];
+  // for (let i = 0; i < filtered_data.length; i += 2) {
+  //   let xIndex = i;
+  //   let yIndex = i + 1;
+
+  // let xValue = filtered_data[xIndex]?.series_name === selectedDataindicator ? filtered_data[xIndex].indicator_value : null;
+  // let yValue= filtered_data[yIndex]?.series_name === "GDP growth (annual %)" ? filtered_data[yIndex].indicator_value : null;
+  // let rValue= filtered_data[yIndex]?.series_name === "Population, total" ? calculateBubbleRadius(filtered_data[yIndex].indicator_value) : null;
+
+  // scatterData.push({
+  //   x:xValue,
+  //   y:yValue,
+  //   r:rValue
+
+  // });
+  // }
+
+  console.log("scatter", scatterData);
+  // }));
+  // console.log()
+  // console.log("data6", filtered_data3)
+  const existingscatterChart = Chart.getChart(
+    document.getElementById("scatterplot")
+  );
+  if (existingscatterChart) {
+    // Destroy the existing chart if it exists
+    existingscatterChart.destroy();
+  }
+  let config2 = new Chart(scatterplot2, {
+    type: "bubble",
+    data: {
+      datasets: [
+        {
+          // label: selectedDatayear,
+          data: scatterData,
+          borderWidth: 2,
+          showLine: true,
+          hovertemplate: "Country: <%= dataset.data[i].country%>",
+          // customdata: sortedCustomData.map((data,i) => data.country_name) // country name
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+          responsive: true,
+          maintainAspectRatio: false, // This might be used instead of aspectRatio
+          width: 400,
+        },
+        title: {
+          display: true, // enables the title
+          text:
+            "Top 30 Countries: GDP Growth (annual %) vs." +
+            " " +
+            selectedDataindicator +
+            " in " +
+            selectedDatayear, // the title text
+          font: {
+            // the title font
+            size: 20,
+          },
+          color: "black", // the title color
+          padding: 10, // the title padding
+        },
+      },
+
+      // aspectRatio: 1,
+
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: selectedDataindicator,
+          },
+          autorange: true,
+          ticks: {
+            stepSize: 1,
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "GDP growth (annual %)",
+          },
+          autorange: true,
+          ticks: {
+            stepSize: 1,
+          },
+        },
+      },
+    },
+  });
+  // render the scatterplot chart
+  config2.render();
+}
+scatterplot(selectedDatayear, selectedDataindictorName);
 // ############################################################
 
 document.addEventListener("DOMContentLoaded", function () {
