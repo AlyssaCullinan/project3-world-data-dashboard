@@ -208,6 +208,7 @@ function highlightFeature(e) {
   layer.bindPopup(popupContent).openPopup();
 
   linechart(selectedCountry, selectedDataindictorName);
+  create_donut_chart(selectedCountry, selectedDatayear)
 }
 
 function resetHighlight(e) {
@@ -378,7 +379,7 @@ async function init() {
       create_bar(selectedDataindictorName, selectedDatayear);
       linechart("USA", selectedDataindictorName);
       scatterplot(selectedDataindictorName,selectedDatayear);
-      create_donut_chart("ARG",2018);
+      create_donut_chart(selectedCountry, selectedDatayear);
     } else {
       console.error("Error initializing: wholeData is undefined");
     }
@@ -400,8 +401,8 @@ async function updateMap() {
   await choropleth(selectedDatayear, selectedDataindicator);
   create_bar(selectedDataindictorName, selectedDatayear);
   linechart("USA", selectedDataindictorName);
-  scatterplot(selectedDataindictorName,selectedDatayear)
-  create_donut_chart("ARG",2018)
+  scatterplot(selectedDataindictorName,selectedDatayear);
+  create_donut_chart(selectedCountry, selectedDatayear);
 }
 
 // Example function when dropdown values are changed
@@ -798,8 +799,8 @@ let mydonutChart = new Chart (ctx, {
   
 
 
-create_donut_chart("ARG",2018)
-
+// create_donut_chart("ARG",2018)
+create_donut_chart(selectedCountry, selectedDatayear)
 
 
 
