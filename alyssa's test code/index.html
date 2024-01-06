@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>World Data Indicators</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <!-- Leaflet JavaScript code -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <!-- D3 library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- Leaflet heatmap plugin-->
+    <!-- <script type="text/javascript" src="../static/leaftlet-heat.js"></script> -->
+    
+  </head>
+
+  <body>
+    <h1>Welcome</h1>
+    <!-- Ensure you have a div with the ID "map" -->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 jumbotron text-center">
+          <h1>World Indicator Dataset</h1>
+          <p>Use the interactive charts below to explore the dataset</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="well">
+            <h5>Country Stats Overview</h5>
+            <select id="selDataset" onchange="optionChanged(this.value)"></select>
+            <select id="selseries" onchange="optionChanged(this.value)"></select>
+          </div>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Country</h3>
+            </div>
+            <div id="sample-metadata" class="panel-body"></div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div id="map"></div>
+        </div>
+        <div class="col-md-5">
+          <div id="plot"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="scatter"></div>
+        </div>
+      </div>
+    </div>
+    <div style="width: 800px; height: 500px" id="plotly"></div>
+    <div id="plot"></div>
+    <div id="scatterplot"></div>
+    <div style="width: 700px; height: 500px"><canvas id="myChart"></canvas></div>
+    <div style="width: 700px; height: 500px"><canvas id="scatterplot2"></canvas></div>
+    <div style="width: 700px; height: 500px"><canvas id="lineChart"></canvas></div>  
+    <div style="width: 700px; height: 500px"><canvas id="doughnutChart"></canvas></div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <script type="text/javascript" src="../static/js/script.js"></script> -->
+    <!-- <script type="text/javascript" src="../static/js/bubble_plot_attempt.js"></script> -->
+    <script type="text/javascript" src="./alyssastestcode.js"></script>
+  </body>
+</html>

@@ -4,4 +4,3 @@ PGHOST = 'localhost'
 PGPORT = "5433"
 PGDB = "worldbankinfo"
 
-
