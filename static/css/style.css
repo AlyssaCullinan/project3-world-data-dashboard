@@ -17,6 +17,7 @@ body {
   background-color: rgba(0, 0, 0, 0.9);
   /* background-color: #f0f8ff; */
   color: white; /* Set text color to white */
+  /* overflow: hidden; */
 }
 
 #map,
@@ -129,7 +130,8 @@ h1 {
   background-color: #f0f0f0;
 }
 
-#scatter_plot {
+#scatter_plot,
+#donut_chart {
   height: 300px;
   width: 100%;
   /* overflow: hidden; */

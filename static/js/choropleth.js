@@ -208,6 +208,7 @@ function highlightFeature(e) {
   layer.bindPopup(popupContent).openPopup();
 
   linechart(selectedCountry, selectedDataindictorName);
+  create_donut_chart(selectedCountry, selectedDatayear);
 }
 
 function resetHighlight(e) {
@@ -378,6 +379,7 @@ async function init() {
       create_bar(selectedDataindictorName, selectedDatayear);
       linechart("USA", selectedDataindictorName);
       scatterplot(selectedDataindictorName, selectedDatayear);
+      create_donut_chart(selectedCountry, selectedDatayear);
     } else {
       console.error("Error initializing: wholeData is undefined");
     }
@@ -477,9 +479,11 @@ function create_bar(selectedSeries, selectedYear) {
     title: {
       text: "Top 10 " + selectedSeries,
       font: {
-        size: 12, // Adjust the font size for the x-axis title
+        size: 12,
+        bold: true,
       },
     },
+    height: 350,
     width: 570,
     xaxis: {
       // add the range slider to the bottom of the graph
@@ -501,15 +505,17 @@ function create_bar(selectedSeries, selectedYear) {
       title: {
         text: selectedSeries,
         font: {
-          size: 12, // Adjust the font size for the x-axis title
+          size: 10, // Adjust the font size for the y-axis title
         },
       },
-
+      tickfont: {
+        size: 10, // Adjust the font size for the y-axis labels
+      },
       // automargin: true,
     },
     modebar: {
       // Remove the buttons you don't want
-      orientation: "h",
+      orientation: "v",
       modeBarButtonsToRemove: [],
     },
     hovermode: false, // Disable hover interactions
@@ -739,6 +745,117 @@ async function scatterplot(selectedDataindicator, selectedDatayear) {
 }
 scatterplot(selectedDatayear, selectedDataindictorName);
 // ############################################################
+
+function getDonutchartData() {
+  return new Promise((resolve, reject) => {
+    let donutChartData; // Declare chartData within the scope of the promise
+
+    d3.json(`/api/data/GDPdata`)
+      .then((data) => {
+        donutChartData = data;
+        resolve(donutChartData);
+      })
+      .catch(reject);
+  });
+}
+
+function getDonutchartData() {
+  return new Promise((resolve, reject) => {
+    let donutChartData; // Declare chartData within the scope of the promise
+
+    d3.json(`/api/data/GDPdata`)
+      .then((data) => {
+        donutChartData = data;
+        resolve(donutChartData);
+      })
+
+      .catch((error) => {
+        console.error("Error fetching data", error);
+        reject(error);
+      })
+      .finally(() => {
+        console.log("resolution");
+      });
+  });
+}
+
+getDonutchartData();
+
+async function create_donut_chart(selectedCountry, selectedDatayear) {
+  let donutChartData = await getDonutchartData();
+  let donutFilter = donutChartData.filter(
+    (data) =>
+      data.country_code == selectedCountry && data.years == selectedDatayear
+  );
+  console.log("fillteerrrr", donutFilter);
+  if (donutFilter.length === 0) {
+    console.log("no data found");
+  }
+  let donut_data = {
+    labels: donutFilter.map((data) => data.series_name),
+    datasets: [
+      {
+        data: donutFilter.map((data) => data.indicator_value),
+        // backgroundColor: ['#FD7F6F', '#7EB0D5', '#B2E061', '#BD7EBE', '#FFB55A', '#FFEE65', '#BEB9DB', '#FDCCCE', '#8BD3C7', 'brown'],
+        // borderColor: ['#FD7F6F', '#7EB0D5', '#B2E061', '#BD7EBE', '#FFB55A', '#FFEE65', '#BEB9DB', '#FDCCCE', '#8BD3C7', 'brown'],
+        // borderWidth: 3,
+        order: 1,
+      },
+    ],
+  };
+
+  let donutOptions = {
+    animation: true,
+    scale: {
+      ticks: {
+        fontSize: 10, // Set font size for scale ticks
+      },
+    },
+
+    responsive: false, // Set to false to specify fixed width and height
+    width: 800, // Set the width of the chart
+    // height: 400,
+    plugins: {
+      title: {
+        display: true, // enables the title
+        text: "Polar Area Chart for " + selectedCountry, // the title text
+        font: {
+          // the title font
+          size: 15,
+        },
+
+        color: "black", // the title color
+        padding: 2, // the title padding
+      },
+      legend: {
+        position: "right", // Set the legend position to 'right'
+        labels: {
+          fontSize: 12,
+        },
+      },
+    },
+  };
+
+  const existingdonutChart = Chart.getChart(
+    document.getElementById("donutchart")
+  );
+  if (existingdonutChart) {
+    existingdonutChart.destroy();
+  }
+  // create variable to get the element in the HTML file
+  let ctx = document.getElementById("donutchart").getContext("2d");
+
+  let mydonutChart = new Chart(ctx, {
+    type: "polarArea",
+    data: donut_data,
+    options: donutOptions,
+  });
+}
+
+// create_donut_chart("ARG",2018)
+// create_donut_chart(selectedCountry, selectedDatayear);
+
+// ####################################################################################
 
 document.addEventListener("DOMContentLoaded", function () {
   init();

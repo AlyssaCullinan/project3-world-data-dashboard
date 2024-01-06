@@ -32,7 +32,7 @@ Base.prepare(autoload_with=engine)
 # print(Base.classes.keys())
 
 #Test = Base.classes.test
-WBIndicators = Base.classes.world_bank_indicator
+WBIndicators = Base.classes.world_bank_indicators
 Lat_lng_info = Base.classes.lat_long_info
 
 
@@ -67,11 +67,12 @@ def world_data():
     all_data =[]
     for country_name,country_code,series_name,series_code,years,indicator_value in results:
         wb_dict ={}
-        wb_dict["country_name"]:country_name
-        wb_dict["country_code"]:country_code
-        wb_dict["series_name"]:series_name
-        wb_dict["years"]:years
-        wb_dict["indicator_value"]:indicator_value
+        wb_dict["country_name"]=country_name
+        wb_dict["country_code"]=country_code
+        wb_dict["series_name"]=series_name
+        wb_dict["series_code"]=series_code
+        wb_dict["years"]=years
+        wb_dict["indicator_value"]=indicator_value
 
         all_data.append(wb_dict)
 
@@ -155,6 +156,27 @@ def filter_series_lat_lng(series):
 
     session.close()
     return series_lat_long_df.to_json(orient ="records")
+
+@app.route('/api/data/GDPdata')
+def world_gdp_data():
+    session = Session(engine)
+    # Query the world bank info table and pull all the data
+    gdpData = session.query(WBIndicators.country_name,WBIndicators.country_code,WBIndicators.series_name,
+                            WBIndicators.series_code,WBIndicators.years,WBIndicators.indicator_value).filter(WBIndicators.series_name.like('%(% of GDP)')).all()
+    # result_df= pd.DataFrame(results)
+    session.close()
+    # return result_df.to_json(orient ="records")
+    all_gdp_data =[]
+    for country_name,country_code,series_name,series_code,years,indicator_value in gdpData:
+        wb_dict ={}
+        wb_dict["country_name"]=country_name
+        wb_dict["country_code"]=country_code
+        wb_dict["series_name"]=series_name
+        wb_dict["series_code"]= series_code
+        wb_dict["years"]=years
+        wb_dict["indicator_value"]=indicator_value
+        all_gdp_data.append(wb_dict)
+    return jsonify(all_gdp_data)
 
 @app.route('/api/data/choropleth/<series>/<year>')
 def choropleth_population(series,year):
