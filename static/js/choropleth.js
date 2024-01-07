@@ -56,20 +56,7 @@ function colorScales(indicatorValue, indicator) {
     minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (6 / 7);
   const mid7 = maxIndicatorValue;
   console.log()
-  if (indicator === "GC.DOD.TOTL.GD.ZS") {
-    return d3
-      .scaleLinear()
-      .domain([minIndicatorValue, 50, 60, 70, 80, 90, maxIndicatorValue])
-      .range([
-        " #f7fcb9",
-        "#addd8e",
-        "#78c679",
-        "#41ab5d",
-        "#238443",
-        "#006837",
-        "#004529",
-      ]);
-  } else if (indicator === "NE.EXP.GNFS.ZS") {
+if (indicator === "NE.EXP.GNFS.ZS") {
     return d3
       .scaleLinear()
       .domain([minIndicatorValue, 20, 30, 40, 50, 60, 80, maxIndicatorValue])
@@ -147,7 +134,7 @@ function colorScales(indicatorValue, indicator) {
         100000000000,
         500000000000,
         1000000000000,
-        maxMilitaryExpenditureValue,
+        877000000000,
       ])
       .range([
         "#FFEDA0", // Pale yellow for values less than 500 million
@@ -159,55 +146,51 @@ function colorScales(indicatorValue, indicator) {
         "#BD0026", // Dark red for values between 100 billion and 500 billion
         "#800026", // Red for values greater than 500 billion
       ]);
-  } else if (indicator === "SH.XPD.CHEX.PC.CD") {
-    return d3
-      .scaleLinear()
-      .domain([
-        0,
-        1000,
-        2000,
-        4000,
-        6000,
-        8000,
-        10000,
-        12000,
-        maxIndicatorValue,
-      ])
-      .range([
-        "#B0E0E6",  // Alice Blue
-        "#ADD8E6",  // Light Blue
-        "#87CEEB",  // Sky Blue
-        "#4682B4",  // Steel Blue
-        "#5F9EA0",  // Cadet Blue
-        "#00CED1",  // Dark Turquoise
-        "#008080",  // Teal
-        "#006400",  // Dark Green
-      ]);
-  } else if (indicator === "NV.AGR.TOTL.ZS") {
-    return d3
-      .scaleLinear()
-      .domain([
-        0,
-        10,
-        20,
-        30,
-        40,
-        50,
-        60,
-        70,
-        72.2403877,
-      ])
-      .range([
-        "#F7FCF5",  // Mint Cream
-        "#E5F5E0",  // Honeydew
-        "#C7E9C0",  // Pale Green
-        "#A1D99B",  // Light Green
-        "#74C476",  // Medium Green
-        "#41AB5D",  // Green
-        "#238B45",  // Dark Green
-        "#005A32",  // Forest Green
-      ]);
-  } else if (indicator === "SH.XPD.CHEX.GD.ZS") {
+    } else if (indicator === "SH.XPD.CHEX.PC.CD") {
+      return d3
+        .scaleLog()
+        .domain([
+          0.5,
+          20,
+          40,
+          1000,
+          2000,
+          5000,
+          8000,
+          10000,
+          12000,
+        ])
+        .range([
+          "#F7FBFF",  // Light Blue (0.5)
+          "#D3EAF8",  // Lighter Blue (20)
+          "#A1C9E3",  // Medium Blue (40)
+          "#6B9ACF",  // Darker Blue (1000)
+          "#4B7CAB",  // Steel Blue (2000)
+          "#30618B",  // Medium Blue (5000)
+          "#1F4872",  // Dark Blue (8000)
+          "#113260",  // Navy Blue (10000)
+        ]);
+  
+    } else if (indicator === "NV.AGR.TOTL.ZS") {
+      return d3
+        .scaleLinear()
+        .domain([0, 3, 7.5, 10.5, 15.5, 20.5, 25.5, 30.5, 35.5, 40, 50, 55])
+        .range([
+          "#B0E0E6",  // Powder Blue (0)
+          "#DFF5FF",  // Lighter Blue-Green (3)
+          "#A2D4C9",  // Pale Green (7.5)
+          "#BAE4B3",  // Light Green (10.5)
+          "#A2D99B",  // Medium Green (15.5)
+          "#79C279",  // Green (20.5)
+          "#56B56F",  // Darker Green (25.5)
+          "#399C6E",  // Dark Green (30.5)
+          "#1F8B4C",  // Forest Green (35.5)
+          "#00703C",  // Deep Green (40)
+          "#005A32",  // Very Dark Green (50)
+          "#FF0000",  // Red (51 and above)
+        ]);
+
+    } else if (indicator === "SH.XPD.CHEX.GD.ZS") {
     return d3
       .scaleLinear()
       .domain([
@@ -242,36 +225,43 @@ function colorScales(indicatorValue, indicator) {
   } else if (indicator === "NE.IMP.GNFS.ZS") {
     return d3
       .scaleLinear()
-      .domain([minIndicatorValue, 20, 40, 80, 120, 180, maxIndicatorValue])
+      .domain([minIndicatorValue, 20, 30, 40, 60, 80, 100, 120, 140, 160, 180, 200, maxIndicatorValue])
       .range([
-        "#FFEDA0",  // Pale Yellow
+        "#FFEDA0",  // Lightest Yellow
         "#FED976",  // Light Yellow
-        "#FEB24C",  // Yellow
+        "#FEB24C",  // Medium Yellow
+        "#FDAE61",  // Darker Yellow
         "#FD8D3C",  // Dark Orange
-        "#FC4E2A",  // Orange
         "#E31A1C",  // Red-Orange
         "#BD0026",  // Dark Red
+        "#800026",  // Darker Red
+        "#550019",  // Very Dark Red
+        "#33000D",  // Almost Black
+        "#1A0006",  // Very Dark Gray
+        "#000000"   // Black
       ]);
-  } else if (indicator === "FP.CPI.TOTL.ZG") {
-    return d3
-      .scaleLinear()
-      .domain([-20, -5, 0, 5, 10, 20, 50, 100, 200, 360])
-      .range([
-        "#2c7bb6",  // Blue
-        "#abd9e9",
-        "#ffffbf",  // Yellow
-        "#fdae61",  // Orange
-        "#d7191c",  // Red
-        "#a50f15",
-        "#fee08b",  // Light Yellow
-        "#d73027",  // Dark Orange
-        "#4575b4",  // Dark Blue
-        "#313695",  // Dark Blue (repeat)
-      ]);
+    } else if (indicator === "FP.CPI.TOTL.ZG") {
+      return d3
+        .scaleLinear()
+        .domain([minIndicatorValue, -10, -5, 0, 5, 10, 20, 50, 100, 200, maxIndicatorValue])
+        .range([
+          "##4575b4",  // Black (min value)
+          "#91bfdb",  // Light Blue (-10)
+          "#d73027",  // Dark Orange (-5)
+          "#fee08b",  // Light Yellow (0)
+          "#fdae61",  // Orange (5)
+          "#d7191c",  // Dark Red (10)
+          "#a50f15",  // Darker Red (20)
+          "#d9ef8b",  // Light Yellow (50)
+          "#d73027",  // Dark Orange (100)
+          "#595959",  // Gray (200)
+          "##4575b4",  // Black(max value)
+        ]);
+    
   } else if (indicator === "MS.MIL.XPND.GD.ZS") {
     return d3
     .scaleLinear()
-    .domain([minIndicatorValue, 5, 10, 15, 20, 25, 30, maxIndicatorValue])
+    .domain([minIndicatorValue, .5, 10, 15, 20, 25, 30, maxIndicatorValue])
     .range([
         "#FFE4B5",  // Moccasin
         "#CD853F",  // Peru
