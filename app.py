@@ -48,10 +48,7 @@ def home():
     """List API routes"""
     return render_template('index.html')
 
-@app.route("/heat.html")
-def heat():
-    """List API routes"""
-    return render_template('heat.html')
+
 
 
 @app.route('/api/data')
@@ -208,7 +205,7 @@ def choropleth_population(series,year):
 
 @app.route('/api/v2.0/choropleth/geo')
 def choropleth_geo():
-   with open('./countries.geo.json', 'r') as geo_file:
+   with open('./static/data/countries.geo.json', 'r') as geo_file:
     geo_data = load(geo_file)
         
     return jsonify(geo_data)

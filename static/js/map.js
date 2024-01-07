@@ -1,4 +1,9 @@
-import { linechart } from "./line _chart.js";
+import { linechart } from "./line_chart.js";
+import { create_bar } from "./bar_chart.js";
+import { scatterplot } from "./scatter_plot.js";
+import { create_donut_chart } from "./polarArea_chart.js";
+import { getSelectedIndicator } from "./main.js";
+
 let map;
 let geojson;
 let IndicatorData;
@@ -209,6 +214,7 @@ function highlightFeature(e) {
   layer.bindPopup(popupContent).openPopup();
 
   linechart(selectedCountry, selectedDataindictorName);
+  create_donut_chart(selectedCountry, selectedDatayear);
 }
 
 function resetHighlight(e) {
@@ -234,7 +240,7 @@ function onEachFeature(feature, layer) {
 }
 
 // Create choropleth function to be called at various years
-function choropleth(year, indicator) {
+export function choropleth(year, indicator) {
   // Reset existing style layer before applying a new one
   return new Promise((resolve, reject) => {
     // Reset existing style layer before applying a new one
@@ -333,9 +339,7 @@ function indicatorDropdown() {
 }
 
 // Function to initialize the choropleth
-async function init() {
-  console.log("main.js loaded");
-
+export async function init() {
   // Add base layer
   map = L.map("map", {
     // center: [17.5707, -3.9932], // Initial center coordinates
@@ -380,6 +384,8 @@ async function init() {
       // console.log(year);
       create_bar(selectedDataindictorName, selectedDatayear);
       linechart("USA", selectedDataindictorName);
+      scatterplot(selectedDataindictorName, selectedDatayear);
+      create_donut_chart(selectedCountry, selectedDatayear);
     } else {
       console.error("Error initializing: wholeData is undefined");
     }
@@ -388,124 +394,36 @@ async function init() {
   }
 }
 
-async function updateMap() {
-  console.log("updateMap called");
-  // Example: Log selected values from dropdowns
-  selectedDatayear = d3.select("#selDatayear").property("value");
-  selectedDataindicator = d3.select("#selDataindicator").property("value");
-  selectedDataindictorName = d3
-    .select("#selDataindicator option:checked")
-    .text();
-
-  // console.log(selectedDataindictorName);
-
-  await choropleth(selectedDatayear, selectedDataindicator);
-  create_bar(selectedDataindictorName, selectedDatayear);
-  linechart("USA", selectedDataindictorName);
-}
-
-// Example function when dropdown values are changed
-function optionChanged(type, value) {
-  // console.log("Dropdown selected:", type, value);
-  console.log("optionChanged called", type, value);
-  var selectedValue;
-
-  if (type === "year") {
-    selectedValue = value; // Use the passed 'value' parameter directly
-    // console.log("Selected Year:", selectedValue);
-  } else if (type === "indicator") {
-    selectedValue = d3.select("#selDataindicator").property("value");
-    // console.log("Selected Indicator:", selectedValue);
-  }
-}
-//  Use d3.select to bind the click event to the button
-d3.select("button").on("click", updateMap);
-
-// Function to get the selectedIndicator
-function getSelectedIndicator() {
-  return d3.select("#selDataindicator").property("value");
-}
-
 // #######################################################
 // create functions to sort the data
-function sortDescending(a, b) {
-  return b[1] - a[1];
-}
-function sortAscending(a, b) {
-  return a[1] - b[1];
-}
 
-function create_bar(selectedSeries, selectedYear) {
-  // select only the top 10 countries
-  let sortedData = indicatorData.sort(sortDescending).slice(0, 10);
-  // create a variable for the  series indicator value and a variable for the country
-  // console.log(sortedData);
-  let indicator_val = sortedData.map((d) => d.indicator_value);
-  // console.log(indicator_val);
-  let country = sortedData.map((d) => d.country_name);
-  // create the trace object
-  let trace = {
-    x: country,
-    y: indicator_val,
-    type: "bar",
-    // orientation: 'h',
-    marker: {
-      color: [
-        "#FD7F6F",
-        "#7EB0D5",
-        "#B2E061",
-        "#BD7EBE",
-        "#FFB55A",
-        "#FFEE65",
-        "#BEB9DB",
-        "#FDCCCE",
-        "#8BD3C7",
-        "brown",
-      ],
-    },
-  };
-  // create the layout
-  let barLayout = {
-    // make the title auto-update depending on the selected year and series
-    title: "Top 10 " + selectedSeries + " " + "in " + selectedYear,
-    height: 300,
-    // width: 475,
-    xaxis: {
-      // add the range slider to the bottom of the graph
-      title: "Country Name",
-      // sort the bar chart in ascending order
-      categoryorder: "total ascending",
-      automargin: true,
-    },
-    yaxis: {
-      title: selectedSeries,
-      automargin: true,
-    },
-    modebar: {
-      // Remove the buttons you don't want
-      orientation: "h",
-      modeBarButtonsToRemove: [],
-    },
-    hovermode: false, // Disable hover interactions
-    autosize: false,
-  };
-
-  let top10BarData = [trace];
-  Plotly.newPlot("bar_chart", top10BarData, barLayout);
+export function sortDescending(a, b) {
+  return b.indicator_value - a.indicator_value;
 }
 
 // #######################################################
+function linechartData() {
+  return new Promise((resolve, reject) => {
+    let chartData; // Declare chartData within the scope of the promise
 
+    d3.json(`/api/data`)
+      .then((data) => {
+        chartData = data;
+        // console.log(chartData); // Move inside the 'then' block to log after data is fetched
+        resolve(chartData);
+      })
+      .catch(reject);
+  });
+}
 // ############################################################
 
-document.addEventListener("DOMContentLoaded", function () {
-  init();
-});
+// ####################################################################################
 
 export {
-  selectedDataindictorName,
-  selectedDatayear,
+  // selectedDataindictorName,
+  // selectedDatayear,
   selectedCountry,
-  optionChanged,
-  updateMap,
+  indicatorData,
+  linechartData,
+  // sortDesceding,
 };

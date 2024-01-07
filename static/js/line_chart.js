@@ -1,22 +1,6 @@
-import {
-  selectedDatayear,
-  selectedDataindictorName,
-  selectedCountry,
-} from "./main.js";
+import { selectedCountry, linechartData } from "./map.js";
 
-function linechartData() {
-  return new Promise((resolve, reject) => {
-    let chartData; // Declare chartData within the scope of the promise
-
-    d3.json(`/api/data`)
-      .then((data) => {
-        chartData = data;
-        // console.log(chartData); // Move inside the 'then' block to log after data is fetched
-        resolve(chartData);
-      })
-      .catch(reject);
-  });
-}
+import { selectedDatayear, selectedDataindictorName } from "./main.js";
 
 async function linechart(selectedCountry, selectedDataindictorName) {
   // console.log(selectedCountry);
@@ -43,11 +27,12 @@ async function linechart(selectedCountry, selectedDataindictorName) {
   };
   let lineOptions3 = {
     // indexAxis: 'y',
+    // responsive: false,
     animation: false,
     plugins: {
       title: {
         display: true, // enables the title
-        text: selectedDataindictorName + "Chart for " + selectedCountry, // the title text
+        text: "Line Chart", // the title text
         font: {
           // the title font
           size: 20,
