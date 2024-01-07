@@ -55,7 +55,7 @@ function colorScales(indicatorValue, indicator) {
   const mid6 =
     minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (6 / 7);
   const mid7 = maxIndicatorValue;
-
+  console.log()
   if (indicator === "GC.DOD.TOTL.GD.ZS") {
     return d3
       .scaleLinear()
@@ -74,28 +74,28 @@ function colorScales(indicatorValue, indicator) {
       .scaleLinear()
       .domain([minIndicatorValue, 20, 30, 40, 50, 60, 80, maxIndicatorValue])
       .range([
-        "#fdae61",
-        "#fee08b",
-        "#d73027",
-        "#4575b4",
-        "#91bfdb",
-        "#313695",
-        "#a50026",
-        "#313695",
+        "#F0EAD6",  // Eggshell
+        "#DAC1A0",  // Tan
+        "#BFA581",  // Light Brown
+        "#A9865A",  // Brown
+        "#8F6F43",  // Dark Brown
+        "#72582D",  // Chocolate
+        "#4E3D28",  // Espresso
+        "#3C2817",  // Coffee
       ]);
-  } else if (indicator === "NY.GDP.MKTP.KD.ZG") {
+  } else if (indicator === "NY.GDP.MKTP.KD.ZG" || indicator == 'SP.POP.GROW') {
     return d3
       .scaleLinear()
       .domain([minIndicatorValue, 2, 3, 4, 5, 6, 7, maxIndicatorValue])
       .range([
-        "#FFEDA0", // Pale yellow for populations less than 20 million
-        "#FED976", // Light yellow for populations greater than or equal to 20 million
-        "#FEB24C", // Yellow for populations greater than or equal to 50 million
-        "#E31A1C", // Light orange for populations greater than or equal to 100 million
-        "#FC4E2A", // Orange for populations greater than or equal to 200 million
-        "#FD8D3C", // Dark orange for populations greater than or equal to 500 million
-        "#B2D732", // Light green for populations greater than or equal to 1 billion
-        "#6ECC19",
+        "#F7FCF5",  // Mint Cream
+        "#E5F5E0",  // Honeydew
+        "#C7E9C0",  // Pale Green
+        "#A1D99B",  // Light Green
+        "#74C476",  // Medium Green
+        "#41AB5D",  // Green
+        "#238B45",  // Dark Green
+        "#005A32",  // Forest Green
       ]);
   } else if (indicator === "SP.POP.TOTL" || indicator == "MS.MIL.XPND.CD") {
     return d3
@@ -120,6 +120,168 @@ function colorScales(indicatorValue, indicator) {
         "#BD0026", // Dark red for populations greater than or equal to 1 billion
         "#800026", // Red for populations greater than or equal to 2 billion
       ]);
+    } else if (indicator === "NY.GDP.MKTP.CD") {
+      return d3
+        .scaleThreshold()
+        .domain([
+          500000000,    // Adjusted breakpoints based on your data
+          1000000000,
+          5000000000,
+          10000000000,
+          50000000000,
+          100000000000,
+          500000000000,
+          1000000000000, // Adjusted upper limit based on your data
+          maxIndicatorValue,
+        ])
+        .range(["#fee5d9", "#fcbba1", "#fc9272", "#fb6a4a", "#de2d26", "#a50f15", "#67000d"]);
+  } else if (indicator === "MS.MIL.XPND.CD") {
+    return d3
+      .scaleLinear()
+      .domain([
+        0,
+        1000000000,
+        5000000000,
+        10000000000,
+        50000000000,
+        100000000000,
+        500000000000,
+        1000000000000,
+        maxMilitaryExpenditureValue,
+      ])
+      .range([
+        "#FFEDA0", // Pale yellow for values less than 500 million
+        "#FED976", // Light yellow for values between 500 million and 1 billion
+        "#FEB24C", // Yellow for values between 1 billion and 5 billion
+        "#FD8D3C", // Dark orange for values between 5 billion and 10 billion
+        "#FC4E2A", // Orange for values between 10 billion and 50 billion
+        "#E31A1C", // Orange-red for values between 50 billion and 100 billion
+        "#BD0026", // Dark red for values between 100 billion and 500 billion
+        "#800026", // Red for values greater than 500 billion
+      ]);
+  } else if (indicator === "SH.XPD.CHEX.PC.CD") {
+    return d3
+      .scaleLinear()
+      .domain([
+        0,
+        1000,
+        2000,
+        4000,
+        6000,
+        8000,
+        10000,
+        12000,
+        maxIndicatorValue,
+      ])
+      .range([
+        "#B0E0E6",  // Alice Blue
+        "#ADD8E6",  // Light Blue
+        "#87CEEB",  // Sky Blue
+        "#4682B4",  // Steel Blue
+        "#5F9EA0",  // Cadet Blue
+        "#00CED1",  // Dark Turquoise
+        "#008080",  // Teal
+        "#006400",  // Dark Green
+      ]);
+  } else if (indicator === "NV.AGR.TOTL.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([
+        0,
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        72.2403877,
+      ])
+      .range([
+        "#F7FCF5",  // Mint Cream
+        "#E5F5E0",  // Honeydew
+        "#C7E9C0",  // Pale Green
+        "#A1D99B",  // Light Green
+        "#74C476",  // Medium Green
+        "#41AB5D",  // Green
+        "#238B45",  // Dark Green
+        "#005A32",  // Forest Green
+      ]);
+  } else if (indicator === "SH.XPD.CHEX.GD.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+      ])
+      .range([
+        "#EFF3FF",  // Alice Blue
+        "#BDD7E7",  // Sky Blue
+        "#6BAED6",  // Steel Blue
+        "#3182BD",  // Royal Blue
+        "#08519C",  // Navy Blue
+        "#08306B",  // Dark Navy Blue
+      ]);
+  } else if (indicator === "SE.XPD.TOTL.GD.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, 1, 2, 3, 4, 5, maxIndicatorValue])
+      .range([
+        "#F0F8FF",  // Alice Blue
+        "#B0E0E6",  // Powder Blue
+        "#87CEEB",  // Sky Blue
+        "#4682B4",  // Steel Blue
+        "#4169E1",  // Royal Blue
+        "#000080",  // Navy Blue
+        "#001F3F",  // Dark Navy Blue
+      ]);
+  } else if (indicator === "NE.IMP.GNFS.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, 20, 40, 80, 120, 180, maxIndicatorValue])
+      .range([
+        "#FFEDA0",  // Pale Yellow
+        "#FED976",  // Light Yellow
+        "#FEB24C",  // Yellow
+        "#FD8D3C",  // Dark Orange
+        "#FC4E2A",  // Orange
+        "#E31A1C",  // Red-Orange
+        "#BD0026",  // Dark Red
+      ]);
+  } else if (indicator === "FP.CPI.TOTL.ZG") {
+    return d3
+      .scaleLinear()
+      .domain([-20, -5, 0, 5, 10, 20, 50, 100, 200, 360])
+      .range([
+        "#2c7bb6",  // Blue
+        "#abd9e9",
+        "#ffffbf",  // Yellow
+        "#fdae61",  // Orange
+        "#d7191c",  // Red
+        "#a50f15",
+        "#fee08b",  // Light Yellow
+        "#d73027",  // Dark Orange
+        "#4575b4",  // Dark Blue
+        "#313695",  // Dark Blue (repeat)
+      ]);
+  } else if (indicator === "MS.MIL.XPND.GD.ZS") {
+    return d3
+    .scaleLinear()
+    .domain([minIndicatorValue, 5, 10, 15, 20, 25, 30, maxIndicatorValue])
+    .range([
+        "#FFE4B5",  // Moccasin
+        "#CD853F",  // Peru
+        "#8B4513",  // Saddle Brown
+        "#A52A2A",  // Brown
+        "#8B0000",  // Dark Red
+        "#800000",  // Maroon
+        "#2E1D16",  // Indigo
+      ]);
+
   } else {
     return d3
       .scaleLinear()
@@ -378,7 +540,7 @@ async function init() {
       // console.log(year);
       create_bar(selectedDataindictorName, selectedDatayear);
       linechart("USA", selectedDataindictorName);
-      scatterplot(selectedDataindictorName,selectedDatayear);
+      scatterplot(selectedDataindictorName, selectedDatayear);
       create_donut_chart("USA", selectedDatayear);
     } else {
       console.error("Error initializing: wholeData is undefined");
@@ -401,7 +563,7 @@ async function updateMap() {
   await choropleth(selectedDatayear, selectedDataindicator);
   create_bar(selectedDataindictorName, selectedDatayear);
   linechart("USA", selectedDataindictorName);
-  scatterplot(selectedDataindictorName,selectedDatayear);
+  scatterplot(selectedDataindictorName, selectedDatayear);
   create_donut_chart("USA", selectedDatayear);
 }
 
@@ -481,9 +643,11 @@ function create_bar(selectedSeries, selectedYear) {
     title: {
       text: "Top 10 " + selectedSeries,
       font: {
-        size: 12, // Adjust the font size for the x-axis title
+        size: 12,
+        bold: true,
       },
     },
+    height: 350,
     width: 570,
     xaxis: {
       // add the range slider to the bottom of the graph
@@ -505,15 +669,17 @@ function create_bar(selectedSeries, selectedYear) {
       title: {
         text: selectedSeries,
         font: {
-          size: 12, // Adjust the font size for the x-axis title
+          size: 10, // Adjust the font size for the y-axis title
         },
       },
-
+      tickfont: {
+        size: 10, // Adjust the font size for the y-axis labels
+      },
       // automargin: true,
     },
     modebar: {
       // Remove the buttons you don't want
-      orientation: "h",
+      orientation: "v",
       modeBarButtonsToRemove: [],
     },
     hovermode: false, // Disable hover interactions
@@ -582,23 +748,23 @@ async function linechart(selectedCountry, selectedDataindictorName) {
         grid: {
           display: false,
         },
-        title:{
+        title: {
           display: true,
           text: 'Years'
         }
       },
-      
-    
+
+
       y: {
         grid: {
           display: false
         },
-        title:{
+        title: {
           display: true,
           text: selectedDataindictorName
-            }
-          },
-        },
+        }
+      },
+    },
   };
 
   const existingChart = Chart.getChart(document.getElementById("lineChart"));
@@ -630,49 +796,24 @@ async function scatterplot(selectedDataindicator, selectedDatayear) {
   );
 
   let scatterplot2 = document.getElementById("scatterplot").getContext("2d");
-  // let sizerefbubble = 2.0 * Math.max(...filtered_data3.map(d => d[4]))/(40**2)
   let ybubble = filtered_data
     .filter((data) => data.series_name == selectedDataindicator)
     .map((data) => data.indicator_value);
   let xbubble = filtered_data
     .filter((data) => data.series_name == "GDP growth (annual %)")
     .map((data) => data.indicator_value);
-  // let sortedCountrybubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
   let sortedx = xbubble.sort(sortDescending).slice(0, 50);
   let sortedy = ybubble.sort(sortDescending).slice(0, 50);
-  // let sortedCountries = sortedCountrybubble.sort(sortAscending).slice(0,50);
 
-  // let sortedCustomData = filtered_data.map((data) => data.country_name).sort(sortAscending).slice(0,30)
   let scatterData = filtered_data.map((d, i) => ({
     x: sortedx[i],
     y: sortedy[i],
     country: d.country_name,
-    // sizeref: sizerefbubble,
-    // sizemode: 'area'
-    // function calculateBubbleRadius(radius){
-    //   return Math.sqrt(radius)/1000
+
   }));
-  // let scatterData = [];
-  // for (let i = 0; i < filtered_data.length; i += 2) {
-  //   let xIndex = i;
-  //   let yIndex = i + 1;
 
-  // let xValue = filtered_data[xIndex]?.series_name === selectedDataindicator ? filtered_data[xIndex].indicator_value : null;
-  // let yValue= filtered_data[yIndex]?.series_name === "GDP growth (annual %)" ? filtered_data[yIndex].indicator_value : null;
-  // let rValue= filtered_data[yIndex]?.series_name === "Population, total" ? calculateBubbleRadius(filtered_data[yIndex].indicator_value) : null;
-
-  // scatterData.push({
-  //   x:xValue,
-  //   y:yValue,
-  //   r:rValue
-
-  // });
-  // }
 
   console.log("scatter", scatterData);
-  // }));
-  // console.log()
-  // console.log("data6", filtered_data3)
   const existingscatterChart = Chart.getChart(
     document.getElementById("scatterplot")
   );
@@ -689,8 +830,7 @@ async function scatterplot(selectedDataindicator, selectedDatayear) {
           data: scatterData,
           borderWidth: 2,
           showLine: true,
-          hovertemplate: "Country: <%= dataset.data[i].country%>",
-          // customdata: sortedCustomData.map((data,i) => data.country_name) // country name
+          // hovertemplate: "Country: <%= dataset.data[i].country%>",
         },
       ],
     },
@@ -751,102 +891,6 @@ async function scatterplot(selectedDataindicator, selectedDatayear) {
 }
 scatterplot(selectedDatayear, selectedDataindictorName);
 // ############################################################
-// create Charts.JS Scatter Plot
-
-// async function scatterplot(selectedDataindicator, selectedDatayear) {
-//   // console.log(selectedCountry);
-//   let chartData = await linechartData();
-// // filter data for ChartsJS scatterplot
-// let filtered_data = chartData.filter((data) => (data.series_name == selectedDataindicator || data.series_name == "GDP growth (annual %)" || data.series_name== "Population, total") && data.years == selectedDatayear);
-
-// let scatterplot2 = document.getElementById("scatterplot").getContext("2d");
-// // let sizerefbubble = 2.0 * Math.max(...filtered_data3.map(d => d[4]))/(40**2)
-// let ybubble = filtered_data.filter((data) => data.series_name == selectedDataindicator).map((data) => data.indicator_value);
-// let xbubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
-// // let sortedCountrybubble = filtered_data.filter((data) => data.series_name == "GDP growth (annual %)").map((data) => data.indicator_value);
-// let sortedx = xbubble.sort(sortDescending).slice(0,50);
-// let sortedy = ybubble.sort(sortDescending).slice(0,50);
-// // let sortedCountries = sortedCountrybubble.sort(sortAscending).slice(0,50);
-
-
-// // let sortedCustomData = filtered_data.map((data) => data.country_name).sort(sortAscending).slice(0,30)
-// let scatterData = filtered_data.map((d,i)=>({
-//     x:sortedx[i],
-//     y:sortedy[i],
-//     country: d.country_name
-
-// }))
-
-// const existingscatterChart = Chart.getChart(document.getElementById("scatterplot"));
-// if (existingscatterChart) {
-//   // Destroy the existing chart if it exists
-//   existingscatterChart.destroy();
-// }
-// let config2 = new Chart (scatterplot2, {
-//     type: "bubble",
-//     data:{
-//         datasets: [
-//             {
-//                 // label: selectedDatayear,
-//                 data: scatterData,
-//                 borderWidth: 2,
-//                 showLine: true,
-//                 hovertemplate: 'Country: <%= dataset.data[i].country%>'
-//                 // customdata: sortedCustomData.map((data,i) => data.country_name) // country name
-//             }
-//         ]
-//     },
-//     options:{
-//         plugins:{
-//             legend:{
-//                 display:false
-//             },
-//             title: {
-//               display: true, // enables the title
-//               text: "Top 30: GDP growth (annual %) vs." + ' ' + selectedDataindicator + ' in ' + selectedDatayear, // the title text
-//               font: {
-//                 // the title font
-//                 size: 20,
-//               },
-//               color: "black", // the title color
-//               padding: 10, // the title padding
-//             },
-//           },
-
-        
-//         aspectRatio: 1,
-        
-//     scales:{
-//         x:{
-//             title:{
-//                 display: true,
-//                 text: selectedDataindicator
-//             },
-//             autorange: true,
-//             ticks:{
-//                 stepSize:1
-//             }
-//         },
-//         y: {
-//             title:{
-//                 display: true,
-//                 text: "GDP growth (annual %)"
-//             },
-//            autorange: true,
-//             ticks:{
-//                 stepSize:1
-//             }
-//         }
-//         }
-//     },
-//     }
-
-// );
-// // render the scatterplot chart
-// config2.render()
-//   }
-// scatterplot(selectedDatayear, selectedDataindictorName)
-// ############################################################
 
 function getDonutchartData() {
   return new Promise((resolve, reject) => {
@@ -865,84 +909,80 @@ function getDonutchartData() {
         console.log('resolution')
       }
       );
-      
+
   });
-  
+
 }
 
 
-async function create_donut_chart(selectedCountry, selectedDatayear){
-  
+async function create_donut_chart(selectedCountry, selectedDatayear) {
+
   let donutChartData = await getDonutchartData();
   let donutFilter = donutChartData.filter((data) => data.country_code == selectedCountry && data.years == selectedDatayear)
-  console.log("donut filter",donutFilter);
-  if (donutFilter.length === 0){
+  console.log("donut filter", donutFilter);
+  if (donutFilter.length === 0) {
     console.log("no data found")
-}
-let donut_data =  {
+  }
+  let donut_data = {
     labels: donutFilter.map((data) => data.series_name),
     datasets: [
       {
-          data: donutFilter.map((data)=> data.indicator_value),
-          // backgroundColor: ['#FD7F6F', '#7EB0D5', '#B2E061', '#BD7EBE', '#FFB55A', '#FFEE65', '#BEB9DB', '#FDCCCE', '#8BD3C7', 'brown'],
-          // borderColor: ['#FD7F6F', '#7EB0D5', '#B2E061', '#BD7EBE', '#FFB55A', '#FFEE65', '#BEB9DB', '#FDCCCE', '#8BD3C7', 'brown'],
-          // borderWidth: 3,
-          order: 1
+        data: donutFilter.map((data) => data.indicator_value),
+        order: 1
 
       }
     ]
   };
 
-let donutOptions = {
-  animation	: true,
-  scale: {
-       ticks: {
-      fontSize: 10, // Set font size for scale ticks
+  let donutOptions = {
+    animation: true,
+    scale: {
+      ticks: {
+        fontSize: 10, // Set font size for scale ticks
+      },
     },
-  },
-  borderAlign: 'inner',
-  plugins: {
-    legend: true,
-    labels:{
-      fontColor:'black',
-      fontSize:7,
-      
-    },
-    fontColor:'black',
+    borderAlign: 'inner',
+    plugins: {
+      legend: true,
+      labels: {
+        fontColor: 'black',
+        fontSize: 7,
+
+      },
+      fontColor: 'black',
       title: {
         display: true, // enables the title
         text: "Polar Area Chart for " + selectedCountry + ' in ' + selectedDatayear, // the title text
         font: { // the title font
           size: 15
         },
-        
+
       }
-      
+
     }
 
-    
-};
+
+  };
 
   const existingdonutChart = Chart.getChart(document.getElementById("donutchart"))
-  if(existingdonutChart){
+  if (existingdonutChart) {
     existingdonutChart.destroy();
   }
-// create variable to get the element in the HTML file
-let ctx = document.getElementById("donutchart").getContext("2d");
+  // create variable to get the element in the HTML file
+  let ctx = document.getElementById("donutchart").getContext("2d");
 
 
-let mydonutChart = new Chart (ctx, {
-  type: "polarArea",
-  data: donut_data,
-  options: donutOptions
+  let mydonutChart = new Chart(ctx, {
+    type: "polarArea",
+    data: donut_data,
+    options: donutOptions
 
-});
+  });
 }
-  
+
 
 
 // create_donut_chart("ARG",2018)
-// create_donut_chart("USA", "2020")
 
 
 

@@ -71,7 +71,7 @@ def world_data():
         wb_dict["country_name"]=country_name
         wb_dict["country_code"]=country_code
         wb_dict["series_name"]=series_name
-        wb_dict["series_code"]= series_code
+        wb_dict["series_code"]=series_code
         wb_dict["years"]=years
         wb_dict["indicator_value"]=indicator_value
 
