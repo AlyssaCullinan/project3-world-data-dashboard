@@ -1,37 +1,102 @@
-# World Data Indicators 2013 - 2023
-## Project 3 Proposal
+# World Data Statistics Dashboard 2003 - 2022
+![Alt text](<World Data Statistics.png>)
+## Description
+We created an interactive dashboard to explore data from the official World Bank website. We were interested in telling a story through our visualization dashboard to show various attributes within a single webpage.
 
-Start Date: 12/18/2023
 
-Team: Alyssa Cullinan, Shubhangi Bidkar, Sonia Singh
+Our world has gone through drastic changes especially in the past few years with the pandemic, war, rising inflation, and population trends. We were interested in seeing the global data visualized over the past 20 years.
 
-Repo: https://github.com/AlyssaCullinan/project3-world-indicators.git
 
-Technologies: PostgreSQL, Python (SQLAlchemy, Flask), HTML/CSS, JavaScript (D3, Leaflet, Plotly)
+## Table of Contents 
 
-### Overview
+- [Features](#Features)
+- [Dashboard](#Dashboard)
+- [Folder Structure](#Folder-Structure)
+- [Dashboard Workflow](#Dashboard-Workflow)
+- [Built With](#Built-With)
+- [Running the Application](#Running-the-Application)
+- [Data Sources](#Data-Sources)
+- [Credits](#Credits)
 
-We are analyzing economic, environmental, technological infrastructure, poverty, health, and financial data from two datasets which were downloaded to csv files. We would like to analyze different world indicator trends and perform a statistical analysis on them. 
 
-### Data Sources
-* World Bank World Development Indicators (2012-2022) 
-https://databank.worldbank.org/source/world-development-indicators
+## Features
+ * Two dropdown menus allow users to select the year and indicator name which updates the map and charts.
+ 
+* Choropleth map
+    * When users hover over a country on the map, the line chart and polar area chart update with data for that country.
+* Line chart 
+    * Updates when users hover over a country on the map. Displays time series data for the  selected country and indicator.
+* Bar chart
+    * Displays the top ten countries for the selected indicator and year. 
+* Scatter plot
+    * Updates based on year and indicator selected from the dropdown.
+    * Has a fixed Y axis variable GDP Growth (annual %).
+* Polar Area chart
+    * Updates when users hover over a country on the map. Displays for indicators with "% of GDP" data for that country.
 
-* Global Country Information Dataset (2023)
-https://www.kaggle.com/datasets/nelgiriyewithana/countries-of-the-world-2023/
 
-### Examples of Possible Visualizations
+## Dashboard
+
 ![Alt text](image.png)
 
-![Alt text](image-1.png)
 
-![Alt text](image-2.png)
+## Folder Structure
 
-![Alt text](image-3.png)
+* docs
+* python
+    * data_cleaning.ipynb
+    * config.py
+* static
+    * css
+        * styles.css
+    * data
+        * final_data.csv
+    * images
+    * js
+        * bar_chart.js
+        * leaflet-heat.js
+        * line_chart.js
+        * main.js
+        * map.js
+        * polarArea_chart.js
+        * scatter_plot.js
+* templates
+    * index.html
+* app.py
 
-### Examples of the Dataset
-![Alt text](image-4.png)
-![Alt text](image-5.png)
 
-### Sketch of the Dashboard
-![Alt text](image-6.png)
+## Dashboard Workflow
+
+![work flow diagram](image-2.png)
+
+## Built With
+
+*	Python 
+*	jupyter notebook 
+*	conda 
+*	PostgreSQL
+*	flask
+*	html
+*	javascript
+*	SQLAlchemy
+*	D3 library https://d3js.org/d3.v7.min.js
+*	Plotly https://cdn.plot.ly/plotly-latest.min.js
+*	Leaflet library https://unpkg.com/leaflet@1.9.4/dist/leaflet.js
+*	Chart.js https://www.chartjs.org/
+*	Python Modules
+    *	pandas 
+
+
+## Running The Application
+* Copy the repo and clone it onto your machine.
+* Create a postgres database on your local machine. Use the schema.sql file to create the table structure.
+* Create a config.py and enter your postgres username, password, database name, and connection port. 
+* Run the app.py file
+
+## Data Sources
+* World Bank World Development Indicators (2003-2022) 
+
+    https://databank.worldbank.org/source/world-development-indicators
+
+## Credits
+Team: Alyssa Cullinan, Shubhangi Bidkar
