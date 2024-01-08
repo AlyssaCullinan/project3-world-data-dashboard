@@ -23,6 +23,8 @@ let chartData;
 //   indicatorData,
 // };
 
+
+
 // Function that fetches the indicator value for a given country code and indicator
 function getIndicatorValue(countryCode, data, selectedIndicator) {
   // selectedCountry = countryCode;
@@ -56,45 +58,47 @@ function colorScales(indicatorValue, indicator) {
     minIndicatorValue + (maxIndicatorValue - minIndicatorValue) * (6 / 7);
   const mid7 = maxIndicatorValue;
   console.log()
-if (indicator === "NE.EXP.GNFS.ZS") {
+  if (indicator === "NY.GDP.MKTP.KD.ZG") {
     return d3
       .scaleLinear()
-      .domain([minIndicatorValue, 20, 30, 40, 50, 60, 80, maxIndicatorValue])
+      .domain([minIndicatorValue, 1, 3, 4, 5, 6, 7, maxIndicatorValue])
       .range([
-        "#F0EAD6",  // Eggshell
-        "#DAC1A0",  // Tan
-        "#BFA581",  // Light Brown
-        "#A9865A",  // Brown
-        "#8F6F43",  // Dark Brown
-        "#72582D",  // Chocolate
-        "#4E3D28",  // Espresso
-        "#3C2817",  // Coffee
+        "#b3b3cc",  // Purple for negatives (minvalue)
+        "#E5F5E0",  // Honeydew (2)
+        "#C7E9C0",  // Pale Green (3)
+        "#A1D99B",  // Light Green (4)
+        "#74C476",  // Medium Green (5)
+        "#41AB5D",  // Green (6)
+        "#238B45",  // Dark Green (7)
+        "#005A32",  // Forest Green (maxval)
       ]);
-  } else if (indicator === "NY.GDP.MKTP.KD.ZG" || indicator == 'SP.POP.GROW') {
+  } else if (indicator == 'SP.POP.GROW') {
     return d3
       .scaleLinear()
-      .domain([minIndicatorValue, 2, 3, 4, 5, 6, 7, maxIndicatorValue])
+      .domain([minIndicatorValue, .5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, maxIndicatorValue])
       .range([
-        "#F7FCF5",  // Mint Cream
-        "#E5F5E0",  // Honeydew
-        "#C7E9C0",  // Pale Green
-        "#A1D99B",  // Light Green
-        "#74C476",  // Medium Green
-        "#41AB5D",  // Green
-        "#238B45",  // Dark Green
-        "#005A32",  // Forest Green
+        "#b3b3cc",  // Purple for negatives (minvalue)
+        "#e5f5e0", //.5
+        "#c7e9c0", //1.5
+        "#a1d99b", //2.5
+        "#74c476", //3.5
+        "#41ab5d", //4.5
+        "#238b45", //5.5
+        "#005a32", //6.5
+        "#033500" // max val
+
       ]);
-  } else if (indicator === "SP.POP.TOTL" || indicator == "MS.MIL.XPND.CD") {
+  } else if (indicator === "SP.POP.TOTL") {
     return d3
       .scaleLinear()
-      .domain([
-        20000000,
+      .domain([minIndicatorValue, 20000000,
         50000000,
         100000000,
         200000000,
         500000000,
         1000000000,
         2000000000,
+
         maxIndicatorValue,
       ])
       .range([
@@ -107,24 +111,33 @@ if (indicator === "NE.EXP.GNFS.ZS") {
         "#BD0026", // Dark red for populations greater than or equal to 1 billion
         "#800026", // Red for populations greater than or equal to 2 billion
       ]);
-    } else if (indicator === "NY.GDP.MKTP.CD") {
-      return d3
-        .scaleThreshold()
-        .domain([
-          500000000,    // Adjusted breakpoints based on your data
-          1000000000,
-          5000000000,
-          10000000000,
-          50000000000,
-          100000000000,
-          500000000000,
-          1000000000000, // Adjusted upper limit based on your data
-          maxIndicatorValue,
-        ])
-        .range(["#fee5d9", "#fcbba1", "#fc9272", "#fb6a4a", "#de2d26", "#a50f15", "#67000d"]);
+  } else if (indicator === "NY.GDP.MKTP.CD") {
+    return d3
+      .scaleThreshold()
+      .domain([
+        19456338.03,
+        1000000000,
+        50000000000,
+        100000000000,
+        500000000000,
+        1000000000000,
+        5000000000000,
+        10000000000000,
+        20000000000000,
+        25000000000000,
+      ])
+      .range(["#fee5d9",
+        "#fcbba1",
+        "#fc9272",
+        "#fb6a4a",
+        "#de2d26",
+        "#a50f15",
+        "#67000d",
+        "#330000"
+      ]);
   } else if (indicator === "MS.MIL.XPND.CD") {
     return d3
-      .scaleLinear()
+      .scaleThreshold()
       .domain([
         0,
         1000000000,
@@ -146,51 +159,51 @@ if (indicator === "NE.EXP.GNFS.ZS") {
         "#BD0026", // Dark red for values between 100 billion and 500 billion
         "#800026", // Red for values greater than 500 billion
       ]);
-    } else if (indicator === "SH.XPD.CHEX.PC.CD") {
-      return d3
-        .scaleLog()
-        .domain([
-          0.5,
-          20,
-          40,
-          1000,
-          2000,
-          5000,
-          8000,
-          10000,
-          12000,
-        ])
-        .range([
-          "#F7FBFF",  // Light Blue (0.5)
-          "#D3EAF8",  // Lighter Blue (20)
-          "#A1C9E3",  // Medium Blue (40)
-          "#6B9ACF",  // Darker Blue (1000)
-          "#4B7CAB",  // Steel Blue (2000)
-          "#30618B",  // Medium Blue (5000)
-          "#1F4872",  // Dark Blue (8000)
-          "#113260",  // Navy Blue (10000)
-        ]);
-  
-    } else if (indicator === "NV.AGR.TOTL.ZS") {
-      return d3
-        .scaleLinear()
-        .domain([0, 3, 7.5, 10.5, 15.5, 20.5, 25.5, 30.5, 35.5, 40, 50, 55])
-        .range([
-          "#B0E0E6",  // Powder Blue (0)
-          "#DFF5FF",  // Lighter Blue-Green (3)
-          "#A2D4C9",  // Pale Green (7.5)
-          "#BAE4B3",  // Light Green (10.5)
-          "#A2D99B",  // Medium Green (15.5)
-          "#79C279",  // Green (20.5)
-          "#56B56F",  // Darker Green (25.5)
-          "#399C6E",  // Dark Green (30.5)
-          "#1F8B4C",  // Forest Green (35.5)
-          "#00703C",  // Deep Green (40)
-          "#005A32",  // Very Dark Green (50)
-          "#FF0000",  // Red (51 and above)
-        ]);
+  } else if (indicator === "SH.XPD.CHEX.PC.CD") {
+    return d3
+      .scaleLog()
+      .domain([
+        0.5,
+        20,
+        40,
+        1000,
+        2000,
+        5000,
+        8000,
+        10000,
+        12000,
+      ])
+      .range([
+        "#F7FBFF",  // Light Blue (0.5)
+        "#D3EAF8",  // Lighter Blue (20)
+        "#A1C9E3",  // Medium Blue (40)
+        "#6B9ACF",  // Darker Blue (1000)
+        "#4B7CAB",  // Steel Blue (2000)
+        "#30618B",  // Medium Blue (5000)
+        "#1F4872",  // Dark Blue (8000)
+        "#113260",  // Navy Blue (10000)
+      ]);
 
-    } else if (indicator === "SH.XPD.CHEX.GD.ZS") {
+  } else if (indicator === "NV.AGR.TOTL.ZS") {
+    return d3
+      .scaleLinear()
+      .domain([0, 3, 7.5, 10.5, 15.5, 20.5, 25.5, 30.5, 35.5, 40, 50, 55])
+      .range([
+        "#B0E0E6",  // Powder Blue (0)
+        "#DFF5FF",  // Lighter Blue-Green (3)
+        "#A2D4C9",  // Pale Green (7.5)
+        "#BAE4B3",  // Light Green (10.5)
+        "#A2D99B",  // Medium Green (15.5)
+        "#79C279",  // Green (20.5)
+        "#56B56F",  // Darker Green (25.5)
+        "#399C6E",  // Dark Green (30.5)
+        "#1F8B4C",  // Forest Green (35.5)
+        "#00703C",  // Deep Green (40)
+        "#005A32",  // Very Dark Green (50)
+        "#FF0000",  // Red (51 and above)
+      ]);
+
+  } else if (indicator === "SH.XPD.CHEX.GD.ZS") {
     return d3
       .scaleLinear()
       .domain([
@@ -222,54 +235,54 @@ if (indicator === "NE.EXP.GNFS.ZS") {
         "#000080",  // Navy Blue
         "#001F3F",  // Dark Navy Blue
       ]);
-  } else if (indicator === "NE.IMP.GNFS.ZS") {
+  } else if (indicator === "NE.IMP.GNFS.ZS" || indicator === "NE.EXP.GNFS.ZS") {
     return d3
       .scaleLinear()
       .domain([minIndicatorValue, 20, 30, 40, 60, 80, 100, 120, 140, 160, 180, 200, maxIndicatorValue])
       .range([
-        "#FFEDA0",  // Lightest Yellow
-        "#FED976",  // Light Yellow
-        "#FEB24C",  // Medium Yellow
-        "#FDAE61",  // Darker Yellow
-        "#FD8D3C",  // Dark Orange
-        "#E31A1C",  // Red-Orange
-        "#BD0026",  // Dark Red
-        "#800026",  // Darker Red
-        "#550019",  // Very Dark Red
-        "#33000D",  // Almost Black
-        "#1A0006",  // Very Dark Gray
-        "#000000"   // Black
+        "#FFF5EB",  // Lightest Orange
+        "#FDD0A2",  // Light Orange
+        "#FDAE6B",  // Medium Light Orange
+        "#FD8D3C",  // Medium Orange
+        "#E6550D",  // Dark Orange
+        "#D94701",  // Darker Orange
+        "#C53502",  // Very Dark Orange
+        "#B02C02",  // Deep Orange
+        "#A12900",  // Dark Reddish Orange
+        "#8C2600",  // Darker Reddish Orange
+        "#7F2200",  // Very Dark Reddish Orange
+        "#701C00"   // Almost Brown
       ]);
-    } else if (indicator === "FP.CPI.TOTL.ZG") {
-      return d3
-        .scaleLinear()
-        .domain([minIndicatorValue, -10, -5, 0, 5, 10, 20, 50, 100, 200, maxIndicatorValue])
-        .range([
-          "##4575b4",  // Black (min value)
-          "#91bfdb",  // Light Blue (-10)
-          "#d73027",  // Dark Orange (-5)
-          "#fee08b",  // Light Yellow (0)
-          "#fdae61",  // Orange (5)
-          "#d7191c",  // Dark Red (10)
-          "#a50f15",  // Darker Red (20)
-          "#d9ef8b",  // Light Yellow (50)
-          "#d73027",  // Dark Orange (100)
-          "#595959",  // Gray (200)
-          "##4575b4",  // Black(max value)
-        ]);
-    
+
+  } else if (indicator === "FP.CPI.TOTL.ZG") {
+    return d3
+      .scaleLinear()
+      .domain([minIndicatorValue, -10, -5, 0, 2, 5, 10, 20, maxIndicatorValue])
+      .range([
+        "#0571b0",  // Dark Blue (min value)
+        "#92c5de",  // Light Blue (-10)
+        "#d1e5f0",  // Very Light Blue (-5)
+        "#f7f7f7",  // White (0)
+        "#fddbc7",  // Very Light Red (2)
+        "#f4a582",  // Light Red (5)
+        "#d6604d",  // Dark Red (10)
+        "#b2182b",  // Darker Red (20)
+        "#67001f",  // Darkest Red (max value)
+      ]);
   } else if (indicator === "MS.MIL.XPND.GD.ZS") {
     return d3
-    .scaleLinear()
-    .domain([minIndicatorValue, .5, 10, 15, 20, 25, 30, maxIndicatorValue])
-    .range([
-        "#FFE4B5",  // Moccasin
-        "#CD853F",  // Peru
-        "#8B4513",  // Saddle Brown
-        "#A52A2A",  // Brown
-        "#8B0000",  // Dark Red
-        "#800000",  // Maroon
-        "#2E1D16",  // Indigo
+      .scaleLinear()
+      .domain([minIndicatorValue, .5, 1.5, 3, 3.5, 5, 8.5, 10, maxIndicatorValue])
+      .range([
+        "#fff5f0",
+        "#fee0d2",
+        "#fcbba1",
+        "#fc9272",
+        "#fb6a4a",
+        "#ef3b2c",
+        "#cb181d",
+        "#99000d",
+        "#67001f",
       ]);
 
   } else {
@@ -279,6 +292,9 @@ if (indicator === "NE.EXP.GNFS.ZS") {
       .range(["#CCCCCC", "#CCCCCC"]); // Default scale if indicator is not found
   }
 }
+
+
+
 
 // Function to add color based on population amount
 function getColor(indicatorValue, indicator) {
@@ -291,6 +307,8 @@ function getColor(indicatorValue, indicator) {
     // No data available, return a default color
     return "#CCCCCC"; // You can change this to your preferred default color
   }
+
+
 
   const scale = colorScales(indicatorValue, indicator);
 
