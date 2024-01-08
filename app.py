@@ -49,10 +49,7 @@ def home():
     """List API routes"""
     return render_template('index.html')
 
-@app.route("/heat.html")
-def heat():
-    """List API routes"""
-    return render_template('heat.html')
+
 
 
 @app.route('/api/data')
@@ -158,6 +155,27 @@ def filter_series_lat_lng(series):
     session.close()
     return series_lat_long_df.to_json(orient ="records")
 
+@app.route('/api/data/GDPdata')
+def world_gdp_data():
+    session = Session(engine)
+    # Query the world bank info table and pull all the data
+    gdpData = session.query(WBIndicators.country_name,WBIndicators.country_code,WBIndicators.series_name,
+                            WBIndicators.series_code,WBIndicators.years,WBIndicators.indicator_value).filter(WBIndicators.series_name.like('%(% of GDP)')).all()
+    # result_df= pd.DataFrame(results)
+    session.close()
+    # return result_df.to_json(orient ="records")
+    all_gdp_data =[]
+    for country_name,country_code,series_name,series_code,years,indicator_value in gdpData:
+        wb_dict ={}
+        wb_dict["country_name"]=country_name
+        wb_dict["country_code"]=country_code
+        wb_dict["series_name"]=series_name
+        wb_dict["series_code"]= series_code
+        wb_dict["years"]=years
+        wb_dict["indicator_value"]=indicator_value
+        all_gdp_data.append(wb_dict)
+    return jsonify(all_gdp_data)
+
 @app.route('/api/data/choropleth/<series>/<year>')
 def choropleth_population(series,year):
     # print(series)
@@ -187,7 +205,7 @@ def choropleth_population(series,year):
 
 @app.route('/api/v2.0/choropleth/geo')
 def choropleth_geo():
-   with open(file_path, 'r') as geo_file:
+   with open('./static/data/countries.geo.json', 'r') as geo_file:
     geo_data = load(geo_file)
         
     return jsonify(geo_data)
