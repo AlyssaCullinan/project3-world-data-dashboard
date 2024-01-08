@@ -1,5 +1,7 @@
 PGUID = 'postgres'
 PGPASS = 'postgres'
 PGHOST = 'localhost'
-PGPORT = '5432'
-PGDB = 'WorldBankIndicator'
+PGPORT = "5433"
+PGDB = "worldbankinfo"
+
+

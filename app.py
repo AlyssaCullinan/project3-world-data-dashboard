@@ -11,6 +11,9 @@ from decimal import Decimal
 import simplejson as json
 import pandas as pd
 from json import load
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_dir, 'static', 'data', 'countries.geo.json')
 
 #################################################
 # Database Setup
@@ -25,11 +28,9 @@ engine = create_engine(db_connection_string)
 # reflect an existing database into a new model
 Base = automap_base()
 
-
-
 # reflect the tables
 Base.prepare(autoload_with=engine)
-# print(Base.classes.keys())
+print(Base.classes.keys())
 
 #Test = Base.classes.test
 WBIndicators = Base.classes.world_bank_indicators
@@ -67,7 +68,7 @@ def world_data():
         wb_dict["country_name"]=country_name
         wb_dict["country_code"]=country_code
         wb_dict["series_name"]=series_name
-        wb_dict["series_code"]=series_code
+        wb_dict["series_code"]= series_code
         wb_dict["years"]=years
         wb_dict["indicator_value"]=indicator_value
 
@@ -115,11 +116,11 @@ def filter_series(series):
     all_data =[]
     for country_name,country_code,series_name,series_code,years,indicator_value in series:
         wb_dict ={}
-        wb_dict["country_name"]:country_name
-        wb_dict["country_code"]:country_code
-        wb_dict["series_name"]:series_name
-        wb_dict["years"]:years
-        wb_dict["indicator_value"]:indicator_value
+        wb_dict["country_name"]= country_name
+        wb_dict["country_code"]= country_code
+        wb_dict["series_name"]= series_name
+        wb_dict["years"]= years
+        wb_dict["indicator_value"]= indicator_value
 
         all_data.append(wb_dict)
 
@@ -202,7 +203,6 @@ def choropleth_population(series,year):
         print(all_data)
     # return jsonify(all_data)
 
-
 @app.route('/api/v2.0/choropleth/geo')
 def choropleth_geo():
    with open('./static/data/countries.geo.json', 'r') as geo_file:
@@ -211,5 +211,35 @@ def choropleth_geo():
     return jsonify(geo_data)
 
 
+
+
+@app.route('/api/data/GDPdata')
+def world_gdp_data():
+    session = Session(engine)
+
+    # Query the world bank info table and pull all the data
+    gdpData = session.query(WBIndicators.country_name,WBIndicators.country_code,WBIndicators.series_name,
+                            WBIndicators.series_code,WBIndicators.years,WBIndicators.indicator_value).filter(WBIndicators.series_name.like('%(% of GDP)')).all()
+    # result_df= pd.DataFrame(results)
+
+    session.close()
+    # return result_df.to_json(orient ="records")
+    all_gdp_data =[]
+
+    for country_name,country_code,series_name,series_code,years,indicator_value in gdpData:
+        wb_dict ={}
+        wb_dict["country_name"]=country_name
+        wb_dict["country_code"]=country_code
+        wb_dict["series_name"]=series_name
+        wb_dict["series_code"]= series_code
+        wb_dict["years"]=years
+        wb_dict["indicator_value"]=indicator_value
+
+        all_gdp_data.append(wb_dict)
+
+    return jsonify(all_gdp_data)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
