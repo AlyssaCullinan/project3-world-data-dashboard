@@ -12,11 +12,18 @@ import {
 
 export let selectedDatayear;
 export let selectedDataindictorName;
+selectedDataindictorName;
 // export let selectedCountry;
 
 document.addEventListener("DOMContentLoaded", function () {
   init();
 });
+
+// selectedDatayear = d3.select("#selDatayear").property("value");
+// console.log(selectedCountry);
+// // selectedDataindicator = d3.select("#selDataindicator").property("value");
+// selectedDataindictorName = d3.select("#selDataindicator option:checked").text();
+// console.log(selectedDataindictorName);
 
 async function updateMap() {
   // Example: Log selected values from dropdowns
@@ -25,8 +32,6 @@ async function updateMap() {
   selectedDataindictorName = d3
     .select("#selDataindicator option:checked")
     .text();
-
-  // console.log(selectedDataindictorName);
 
   await choropleth(selectedDatayear, selectedDataindicator);
   create_bar(selectedDataindictorName, selectedDatayear);
@@ -37,7 +42,7 @@ async function updateMap() {
 
 // Example function when dropdown values are changed
 function optionChanged(type, value) {
-  console.log("optionChanged called with type:", type, "and value:", value);
+  // console.log("optionChanged called with type:", type, "and value:", value);
   var selectedValue;
 
   if (type === "year") {

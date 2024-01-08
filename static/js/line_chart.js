@@ -3,10 +3,7 @@ import { selectedCountry, linechartData } from "./map.js";
 import { selectedDatayear, selectedDataindictorName } from "./main.js";
 
 async function linechart(selectedCountry, selectedDataindictorName) {
-  // console.log(selectedCountry);
   let chartData = await linechartData();
-  // console.log(chartData);
-
   // console.log(chartData);
 
   let linechart3filter = chartData.filter(
@@ -14,6 +11,7 @@ async function linechart(selectedCountry, selectedDataindictorName) {
       data.country_code === selectedCountry &&
       data.series_name === selectedDataindictorName
   );
+  // console.log(linechart3filter);
   // / map the data for the labels
   let chartedLabels = linechart3filter.map((data) => data.years);
   let linechartvalues = linechart3filter.map((data) => data.indicator_value);
