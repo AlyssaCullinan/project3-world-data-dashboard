@@ -9,12 +9,14 @@ Our world has gone through drastic changes especially in the past few years with
 
 ## Table of Contents 
 
-If your README is long, add a table of contents to make it easy for users to find what they need.
-
 - [Features](#Features)
-- [Folder Structure](#Folder)
-- [Credits](#credits)
-- [License](#license)
+- [Dashboard](#Dashboard)
+- [Folder Structure](#Folder-Structure)
+- [Dashboard Workflow](#Dashboard-Workflow)
+- [Built With](#Built-With)
+- [Running the Application](#Running-the-Application)
+- [Data Sources](#Data-Sources)
+- [Credits](#Credits)
 
 
 ## Features
@@ -38,30 +40,30 @@ If your README is long, add a table of contents to make it easy for users to fin
 ![Alt text](image.png)
 
 
-
-
-
 ## Folder Structure
 
-* Resources: Raw data downloaded as csvs and json file
-    * FAO.csv
-    * GlobalTemperatures.csv
-    * countries.geojson
-    * countries.csv
-* Assets: Images used on the website
-* database
-    * etl:ipynb: used to develop etl process
-    * database.py: sets up database when flask server is run
+* docs
+* python
+    * data_cleaning.ipynb
+    * config.py
 * static
-* js
-    * main.js
-    * charts.js
-    * bar_chart.js
-* css
-    * styles.css: styles index.html
-* app.py: Flask server with two routes - index and data
+    * css
+        * styles.css
+    * data
+        * final_data.csv
+    * images
+    * js
+        * bar_chart.js
+        * leaflet-heat.js
+        * line_chart.js
+        * main.js
+        * map.js
+        * polarArea_chart.js
+        * scatter_plot.js
 * templates
     * index.html
+* app.py
+
 
 ## Dashboard Workflow
 
@@ -92,7 +94,7 @@ If your README is long, add a table of contents to make it easy for users to fin
 * Run the app.py file
 
 ## Data Sources
-* World Bank World Development Indicators (2012-2022) 
+* World Bank World Development Indicators (2003-2022) 
 
     https://databank.worldbank.org/source/world-development-indicators
 
