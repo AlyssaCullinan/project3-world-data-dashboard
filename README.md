@@ -1,4 +1,3 @@
-# World Data Statistics Dashboard 2003 - 2022
 ![Alt text](<World Data Statistics.png>)
 ## Description
 We created an interactive dashboard to explore data from the official World Bank website. We were interested in telling a story through our visualization dashboard to show various attributes within a single webpage.
