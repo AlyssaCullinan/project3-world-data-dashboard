@@ -1,3 +1,4 @@
+# World Data Statistics Dashboard 2003 - 2022
 ![Alt text](<World Data Statistics.png>)
 ## Description
 We created an interactive dashboard to explore data from the official World Bank website. We were interested in telling a story through our visualization dashboard to show various attributes within a single webpage.
@@ -96,10 +97,6 @@ Our world has gone through drastic changes especially in the past few years with
 * World Bank World Development Indicators (2003-2022) 
 
     https://databank.worldbank.org/source/world-development-indicators
- * Country Polygons as GeoJSON
-
-    https://datahub.io/core/geo-countries
-       
 
 ## Credits
 Team: Alyssa Cullinan, Shubhangi Bidkar
