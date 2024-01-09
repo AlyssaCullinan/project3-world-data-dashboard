@@ -1,4 +1,5 @@
-![Alt text](<World Data Statistics.png>)
+<img width="1591" alt="image" src="https://github.com/AlyssaCullinan/project3-world-indicators/assets/141466633/a7436647-44c3-4cc1-af78-5da2882dfbb3">
+
 ## Description
 We created an interactive dashboard to explore data from the official World Bank website. We were interested in telling a story through our visualization dashboard to show various attributes within a single webpage.
 
@@ -36,7 +37,8 @@ Our world has gone through drastic changes especially in the past few years with
 
 ## Dashboard
 
-![Alt text](image.png)
+![image](https://github.com/AlyssaCullinan/project3-world-indicators/assets/141466633/108c2107-2fc1-4f0a-862b-6faccfd687bb)
+
 
 
 ## Folder Structure
@@ -66,7 +68,8 @@ Our world has gone through drastic changes especially in the past few years with
 
 ## Dashboard Workflow
 
-![work flow diagram](image-2.png)
+![image](https://github.com/AlyssaCullinan/project3-world-indicators/assets/141466633/64f40c8d-0c41-4f70-86d6-7135ace318bc)
+
 
 ## Built With
 
