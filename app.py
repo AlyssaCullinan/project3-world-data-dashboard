@@ -205,7 +205,7 @@ def choropleth_population(series,year):
 
 @app.route('/api/v2.0/choropleth/geo')
 def choropleth_geo():
-   with open('./static/data/countries.geo.json', 'r') as geo_file:
+   with open(file_path, 'r') as geo_file:
     geo_data = load(geo_file)
         
     return jsonify(geo_data)
