@@ -74,19 +74,19 @@ Our world has gone through drastic changes especially in the past few years with
 ## Built With
 
 *	Python 
-*	jupyter notebook 
-*	conda 
+*	Jupyter Notebook 
+*	Conda 
 *	PostgreSQL
-*	flask
-*	html
-*	javascript
+*	Flask
+*	HTML
+*	JavaScript
 *	SQLAlchemy
-*	D3 library https://d3js.org/d3.v7.min.js
+*	D3 Library https://d3js.org/d3.v7.min.js
 *	Plotly https://cdn.plot.ly/plotly-latest.min.js
 *	Leaflet library https://unpkg.com/leaflet@1.9.4/dist/leaflet.js
 *	Chart.js https://www.chartjs.org/
 *	Python Modules
-    *	pandas 
+    *	Pandas 
 
 
 ## Running The Application
