@@ -37,9 +37,7 @@ Our world has gone through drastic changes especially in the past few years with
 
 ## Dashboard
 
-![image](https://github.com/AlyssaCullinan/project3-world-indicators/assets/141466633/108c2107-2fc1-4f0a-862b-6faccfd687bb)
-
-
+![Screenshot 2024-03-09 144118](https://github.com/AlyssaCullinan/project3-world-data-dashboard/assets/141466633/7492ffbd-6747-4007-9738-1575adeab5bf)
 
 ## Folder Structure
 
