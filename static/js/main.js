@@ -19,14 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
   init();
 });
 
-// selectedDatayear = d3.select("#selDatayear").property("value");
-// console.log(selectedCountry);
-// // selectedDataindicator = d3.select("#selDataindicator").property("value");
-// selectedDataindictorName = d3.select("#selDataindicator option:checked").text();
-// console.log(selectedDataindictorName);
-
 async function updateMap() {
-  // Example: Log selected values from dropdowns
+  // Log selected values from dropdowns
   selectedDatayear = d3.select("#selDatayear").property("value");
   let selectedDataindicator = d3.select("#selDataindicator").property("value");
   selectedDataindictorName = d3
